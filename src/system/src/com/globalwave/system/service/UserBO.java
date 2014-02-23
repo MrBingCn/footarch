@@ -467,7 +467,7 @@ public class UserBO extends BaseServiceImpl {
         }
         
 
-        sessionUser.setMarks(this.getMarkItBO().queryByUserId(userResult.getId())) ;
+        //sessionUser.setMarks(this.getMarkItBO().queryByUserId(userResult.getId())) ;
     	return sessionUser ;
     }
 

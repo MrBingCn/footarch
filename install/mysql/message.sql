@@ -98,63 +98,15 @@ values('1210', '第{0}页，第{1}行，第{2}列的值未能读取！' );
 insert into cfg_message(code_, value_) 
 values('1211', '第{0}条数据未能写入数据库，原因为{1}！' );
 
-/* ---------------- biz message start from 10000 -----------------------*/
-/* 10001 to 11000 for account */
-insert into cfg_message(code_, value_) 
-values('10001', '款项已经结清，不能对其进行操作！' );
-
-insert into cfg_message(code_, value_) 
-values('10002', '该操作使最终余额少于0，请检查！' );
-
-
-
-insert into cfg_message(code_, value_) 
-values('10101', '父费项不存在，本操作无效！' );
-
-insert into cfg_message(code_, value_) 
-values('10102', '子费项存在，本操作无效！' );
-
-
-/* 20001 to 21000 for order */
-insert into cfg_message(code_, value_) 
-values('20001', '订单ID有误，请重新操作！' );
-
-insert into cfg_message(code_, value_) 
-values('20002', '无此操作权限，请与管理员联系！' );
-
-insert into cfg_message(code_, value_) 
-values('20003', '此订单已被其他客服处理，请确认后再操作！' );
-
-insert into cfg_message(code_, value_) 
-values('20004', '只能处理自己公司的订单！' );
-
-insert into cfg_message(code_, value_) 
-values('20005', '订单配置有误，请与管理员联系！' );
-
-insert into cfg_message(code_, value_) 
-values('20006', '只能处理自己及下属的订单！' );
-
-insert into cfg_message(code_, value_) 
-values('20007', '缺少必需的参数！' );
-
-insert into cfg_message(code_, value_) 
-values('20008', '订单参数有误，请重新操作！' );
-
-insert into cfg_message(code_, value_) 
-values('20009', '文件不能写入，请重新上传！' );
-
-
-
-
-/* 21001 to 22000 for order */
-insert into cfg_message(code_, value_) 
-values('21001', '订单已经结账成功！' );
-
-insert into cfg_message(code_, value_) 
-values('21002', '订单已经结账撤销成功！' );
 
 
 /* 22001 to 23000 for order */
 
 insert into cfg_message(code_, value_) 
 values('22001', '根据查询条件，未能获取报表数据！' );
+
+
+
+
+INSERT INTO `cfg_resource` (`Key_`, `VALUE_`, `VALUE_en`)
+VALUES ('CompanyName', '红葳足弓矫正有限公司', 'footarch');

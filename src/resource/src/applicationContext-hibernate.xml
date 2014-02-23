@@ -7,7 +7,7 @@
         <!-- 
          -->
         <property name="driverClass" value="com.mysql.jdbc.Driver" />
-        <property name="jdbcUrl" value="jdbc:mysql://localhost:3306/ningbo?useUnicode=true&amp;characterEncoding=utf-8&amp;zeroDateTimeBehavior=convertToNull" />
+        <property name="jdbcUrl" value="jdbc:mysql://localhost:3306/footarch?useUnicode=true&amp;characterEncoding=utf-8&amp;zeroDateTimeBehavior=convertToNull" />
         <property name="user" value="root" />
         <property name="password" value="root" />
         <!-- 
