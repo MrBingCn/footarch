@@ -1,0 +1,119 @@
+
+.arApBlock{
+  width: 99%;background-color: #ffffff;vertical-align: top;padding: 10px 3px 0px;
+}
+
+.arApBlock .role_code_class {
+    padding: 2px;
+}
+
+.arApBlock .first_level {
+}
+
+.arApBlock .second_level {
+}
+
+.arApBlock .invoice_title_class {
+  background: #B8D1F8;
+  height: 25px;padding: 5px 0px 5px 5px; width: 290px;display: inline-block;border: 1px solid #ffffff;
+}
+
+.arApBlock .invoice_detail_class {border-bottom: 1px #B8D1F8 solid;
+display: inline-block;
+width: 435px;
+height: 32px;
+padding-top: 4px;
+vertical-align: top;
+}
+.arApBlock .company_class {
+  background:#C9E1F8;height: 25px;padding-top: 10px;padding-left:5px; width: 290px;display: inline-block;border: 1px solid #ffffff;
+}
+
+.arApBlock .company_sumary_class {
+  background-color: #ffffff;display: inline-block;width: 435px;
+}
+
+.arApBlock .company_sumary_class label{
+	padding: 0 2px 0 0;
+}
+.arApBlock .company_sumary_class input {
+	color:rgb(255, 109, 11);
+}
+.arApBlock .fee_item_class {
+  background:#EAF2F8;height: 25px;padding-top: 10px;padding-left:25px; width: 270px;display: inline-block;border: 1px solid #ffffff;
+}
+
+.arApBlock .fee_value_class {
+  background-color: #ffffff;display: inline-block;width: 435px;
+}
+
+.arApBlock .fee_value_class label {
+	padding: 0 2px 0 2px;
+}
+
+.toolbar {
+  position: absolute;right: -10px;top:4px;
+  background:url(bg_btn.png) repeat-x;height:22px;line-height:22px;padding:1px 5px;border:1px solid #d3d3d3;color:#006699;margin:0 1em;
+}
+.arApBlock .detailIcon {
+  background:url('../images/20/preview.png') no-repeat center;width:20px;height:20px;display: inline-block;padding: 0 2px;
+}
+.arApBlock .notesIcon {
+  background:url('../images/20/menu.png') no-repeat center;width:20px;height:20px;display: inline-block;padding: 0 2px;
+}
+.arApBlock .addressIcon {
+  background:url('../images/20/write-email.png') no-repeat center;width:20px;height:20px;display: inline-block;padding: 0 2px;
+}
+.arApBlock .removeIcon {
+  background:url('../images/20/deletered.png') no-repeat center;width:20px;height:20px;;display: inline-block;padding: 0 2px;
+}
+.arApBlock .addIcon {
+  background:url('../images/20/add.png') no-repeat center;width:20px;height:20px;display: inline-block;padding: 0 2px;
+}
+
+.saveIcon {
+  background:url('../images/20/save.png') no-repeat center;width:20px;height:20px;display: inline-block;padding: 0 2px;
+}
+
+.cancelIcon {
+  background:url('../images/20/cancel.png') no-repeat center;width:20px;height:20px;display: inline-block;padding: 0 2px;
+}
+
+.arAp_title {
+  background:url('admin_title.png') left top no-repeat;
+  height:32px;
+  line-height:32px;
+  text-indent:2em;
+  font-size:14px;
+}
+
+.arAp_title .openIcon {
+  background:url('icon_open.gif') no-repeat center;width:80px;height:20px;display: inline-block;padding: 5px 2px;float: right;
+}
+
+.arAp_title .closeIcon {
+  background:url('icon_close.gif') no-repeat center;width:80px;height:20px;display: inline-block;padding: 5px 2px;float: right;
+}
+
+
+#view_234314709876474 .order_title span { display: block; text-indent: -99999px; overflow: hidden; background-repeat: no-repeat; background-position: -64px -80px;}
+
+.readonly_input {
+  background-color: #E8E8E8;
+}
+
+
+.auto_cut{ 
+width:100%; 
+overflow:hidden; /*不显示超过对象宽度的内容*/ 
+text-overflow:ellipsis; /*当对象内文本溢出时显示省略标记（...）*/ 
+white-space:nowrap; /*限制在一行内显示所有文本*/
+display: inline-block;
+}
+
+
+.order_step_item {position: relative;}
+.order_item_status_no em {position: absolute;right: 10px;}
+.order_item_status_ok em {position: absolute;right: 10px;}
+.order_item_status_no span {width: 120%;}
+.order_item_status_ok span {width: 120%;}

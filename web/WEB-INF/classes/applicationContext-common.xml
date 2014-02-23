@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+<beans default-autowire="byName" default-lazy-init="true">
+    <!-- 
+    *.common and *.base 会转为 *.core，变成工程核心必须的包
+    *.(other-options)可选的工程工具，一般是独立分离，或简单依赖
+     -->
+    <!-- for common init //-->
+    <bean id="initService" scope="prototype" class="com.globalwave.common.service.InitServiceImpl" />
+
+	<!-- for common Catalog config //-->
+	<bean id="catalogService" scope="prototype" class="com.globalwave.common.service.CatalogServiceImpl" />
+	<bean id="common_catalogAction" scope="prototype" class="com.globalwave.common.web.CatalogAction"/>	
+     
+    <!-- for common File config //-->
+    <bean id="fileService" scope="prototype" class="com.globalwave.common.service.FileServiceImpl" />
+    <bean id="common_fileAction" scope="prototype" class="com.globalwave.common.web.FileAction"/>   
+     
+    
+    <!-- for common View config
+    <bean id="viewService" scope="prototype" class="com.globalwave.common.service.ViewServiceImpl" />
+     //-->
+    <!-- 
+    <bean id="common_viewAction" scope="prototype" class="com.globalwave.common.web.ViewAction"/>
+    
+    <bean id="fieldService" scope="prototype" class="com.globalwave.common.service.FieldServiceImpl" />
+     -->     
+
+    <!-- for common Virtual Module config //-->
+    <!-- 
+    <bean id="virtualModuleService" scope="prototype" class="com.globalwave.common.service.VirtualModuleServiceImpl" />
+    <bean id="common_virtualModuleAction" scope="prototype" class="com.globalwave.common.web.VirtualModuleAction"/> 
+     -->
+    
+    
+    
+    
+    <bean id="syncControlService" scope="prototype" class="com.globalwave.common.service.SyncControlServiceImpl" />  
+
+
+    <bean id="syncConfigService" scope="prototype" class="com.globalwave.common.service.SyncConfigServiceImpl" />
+    <bean id="common_syncConfigAction" scope="prototype" class="com.globalwave.common.web.SyncConfigAction"/> 
+
+    <!-- for common SyncColumns config //-->
+    <bean id="syncColumnsService" scope="prototype" class="com.globalwave.common.service.SyncColumnsServiceImpl" />
+
+
+
+
+
+    <!-- for common SyncBatch config //-->
+    <bean id="syncBatchService" scope="prototype" class="com.globalwave.common.service.SyncBatchServiceImpl" />
+    <bean id="common_syncBatchAction" scope="prototype" class="com.globalwave.common.web.SyncBatchAction"/> 
+
+
+
+    <!-- for common SyncRecordBackup config //-->
+    <bean id="syncRecordBackupService" scope="prototype" class="com.globalwave.common.service.SyncRecordBackupServiceImpl" />
+    <bean id="common_syncRecordBackupAction" scope="prototype" class="com.globalwave.common.web.SyncRecordBackupAction"/>   
+
+    <bean id="attributesTemplateService" scope="prototype" class="com.globalwave.common.service.AttributesTemplateServiceImpl" />
+
+</beans>

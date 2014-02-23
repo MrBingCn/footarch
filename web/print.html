@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>´òÓ¡´°¿Ú</title>
+	<meta name="viewport" content="width=960" />
+
+<style media="print">
+.Noprint {
+    display: none;
+}
+
+.PageNext {
+    page-break-after: always;
+}
+</style>
+
+	
+	<script type="text/javascript">
+	window.onload=function () {
+		if(typeof(opener.__getPrintContent) != "undefined") {
+			window.document.body.innerHTML = opener.__getPrintContent() ;
+			window.print();
+	        if(typeof(opener.__getPrintContentOnPrinted) != "undefined") {
+	        	opener.__getPrintContentOnPrinted() ;
+	        }
+
+	        window.close();
+		}
+	}
+	</script>
+</head>
+<body>	
+</body>
+</html>
