@@ -21,7 +21,7 @@
 		</property>
 	</bean> -->
 	
-    <context:component-scan base-package="com.globalwave.**.service,com.globalwave.**.web,com.ningbo.**.service,com.ningbo.**.web" />
+    <context:component-scan base-package="com.globalwave.**.service,com.globalwave.**.web,com.footarch.**.service,com.footarch.**.web" />
 
 	<!-- 支持 @Transactional 标记 -->
 	<tx:annotation-driven/>
