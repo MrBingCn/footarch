@@ -1,33 +1,4 @@
-/**
- *
-Excel SQL制作用例子
-=CONCATENATE("insert into biz_company(country_code, name_cn,name_en,name_short)values('",B2,"','",E2,"','",E2,"','",F2,"');")
-
-=CONCATENATE("insert into biz_company(country_code, name_cn,name_en,name_short)values('",RC[1],"','",TEXT(RC[-3],"yyyy-mm-dd hh:mm:ss"),"','",RC[-2],"','",RC[-1],"');")
- */
-
-
-
-/* biz */
-
-insert into cfg_payment_method (id, code, name, payment_code, payment_name, record_status, sequence) values (1, '1', 'FREIGHT PREPAID', 'P', 'FREIGHT PREPAID', 'A', 0);
-insert into cfg_payment_method (id, code, name, payment_code, payment_name, record_status, sequence) values (2, '2', 'FREIGHT COLLECT', 'C', 'FREIGHT COLLECT', 'A', 0);
-
-
-
-insert into biz_fee_item (id,pro_fee_item_id,code_,name_cn,name_en,order_,record_status)
-values(-1100,null,'S_DWAR','提存', 'S_DWAR',99, 'A');
-insert into biz_fee_item (id,pro_fee_item_id,code_,name_cn,name_en,order_,record_status)
-values(-1101,-1100,'S_DWAR_01','代理一', 'S_DWAR_01',10,  'A');
-insert into biz_fee_item (id,pro_fee_item_id,code_,name_cn,name_en,order_,record_status)
-values(-1102,-1100,'S_DWAR_02','代理二', 'S_DWAR_02',20,  'A');
-insert into biz_fee_item (id,pro_fee_item_id,code_,name_cn,name_en,order_,record_status)
-values(-1103,-1100,'S_DWAR_03','代理三', 'S_DWAR_03',30,   'A');
-
-
-
 /* system */
-
 insert into sys_privilege (id, pro_privilege_id, code_, name_, url_, desc_) values (1, 0, '1', '功能权限', null, null);
 insert into sys_privilege (id, pro_privilege_id, code_, name_, url_, desc_) values (1010, 1, '1010', '查询询价单', '', null);
 insert into sys_privilege (id, pro_privilege_id, code_, name_, url_, desc_) values (1020, 1, '1020', '新建询价单', '', null);
@@ -57,7 +28,7 @@ insert into sys_privilege (id, pro_privilege_id, code_, name_, url_, desc_) valu
 insert into sys_privilege (id, pro_privilege_id, code_, name_, url_, desc_) values (2130, 1, '2130', '日志查询', '', null);
 insert into sys_privilege (id, pro_privilege_id, code_, name_, url_, desc_) values (2140, 1, '2140', '部门管理', '', null);
 insert into sys_privilege (id, pro_privilege_id, code_, name_, url_, desc_) values (2150, 1, '2150', '角色管理', '', null);
-insert into sys_privilege (id, pro_privilege_id, code_, name_, url_, desc_) values (2150, 1, '2160', '消息管理', '', null);
+insert into sys_privilege (id, pro_privilege_id, code_, name_, url_, desc_) values (2160, 1, '2160', '消息管理', '', null);
 
 insert into sys_privilege (id, pro_privilege_id, code_, name_, url_, desc_) values (3000, 1, '3000', '应收应付管理', '', null);
 insert into sys_privilege (id, pro_privilege_id, code_, name_, url_, desc_) values (3001, 1, '3001', '费用管理', '', null);
