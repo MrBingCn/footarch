@@ -8,6 +8,7 @@ drop table if exists biz_order_payment;
 /*==============================================================*/
 create table biz_address  (
    id                bigint(12) not null AUTO_INCREMENT,
+   user_id           bigint(12) not null,
    name              VARCHAR(50) NOT NULL,
    mobile            VARCHAR(20),
    state             VARCHAR(50),
