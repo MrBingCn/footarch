@@ -43,7 +43,7 @@ create table biz_order  (
    total             decimal(12,2) default 0.00 not null comment '整单总金额',
    comments          varchar(250) comment '备注',
    payment_type      CHAR(1) default '0' NOT NULL comment '付款类型:线上支付（0），线下支付（1）', 
-   status            CHAR(1) default '0' NOT NULL comment '订单状态: 购物车（P）,已提交（M）,已支付（C），已打包（A），已发货（D），已取消（X）',
+   status            CHAR(1) default 'P' NOT NULL comment '订单状态: 购物车（P）,已提交（M）,已支付（C），已打包（A），已发货（D），已取消（X）',
    status_payment    CHAR(1) default '0' NOT NULL comment '支付状态:未支付（0），已支付（1）', 
    status_checkout   CHAR(1) default '0' NOT NULL comment '出账状态:未出帐（0），可出帐（1），已出帐（2）', 
    created_by        varchar(50) comment '创建的操作员Login_ID',
