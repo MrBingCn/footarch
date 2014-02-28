@@ -9,7 +9,7 @@ drop table if exists biz_order_payment;
 create table biz_address  (
    id                bigint(12) not null AUTO_INCREMENT,
    user_id           bigint(12) not null,
-   name              VARCHAR(50) NOT NULL,
+   name              VARCHAR(50) not NULL,
    mobile            VARCHAR(20),
    state             VARCHAR(50),
    city              VARCHAR(50),
@@ -25,7 +25,7 @@ create table biz_address  (
    version_id        bigint comment '用于做DAO层的版本控制',
    
    constraint PK_BIZ_ADDRESS primary key (id)
-} ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*==============================================================*/
 /* Table: 订单主表                                                                                                                            */
@@ -43,9 +43,9 @@ create table biz_order  (
    total             decimal(12,2) default 0.00 not null comment '整单总金额',
    comments          varchar(250) comment '备注',
    payment_type      CHAR(1) default '0' NOT NULL comment '付款类型:线上支付（0），线下支付（1）', 
-   status            CHAR(1) default '0' NOT NULL comment '订单状态: ',
+   status            CHAR(1) default '0' NOT NULL comment '订单状态: 购物车（P）,已提交（M）,已支付（C），已打包（A），已发货（D），已取消（X）',
    status_payment    CHAR(1) default '0' NOT NULL comment '支付状态:未支付（0），已支付（1）', 
-   status_checkout   CHAR(1) default '0' NOT NULL comment '出账状态:未出帐（0），可出帐（1），已出帐（1）', 
+   status_checkout   CHAR(1) default '0' NOT NULL comment '出账状态:未出帐（0），可出帐（1），已出帐（2）', 
    created_by        varchar(50) comment '创建的操作员Login_ID',
    created_on        datetime comment '创建的时间',
    updated_by        varchar(50) comment '更新的操作员Login_ID',
