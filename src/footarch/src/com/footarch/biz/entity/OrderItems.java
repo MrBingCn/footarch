@@ -18,6 +18,7 @@ public class OrderItems extends BaseEntity {
 	private Long id;
 	private Long order_id;
 	private Long catentry_id;
+	private String name;
 	private Long ffmcentert_id;
 	private Double price;
 	private Integer quantity;
@@ -64,5 +65,11 @@ public class OrderItems extends BaseEntity {
 	}
 	public void setAdjustment(Double adjustment) {
 		this.adjustment = adjustment;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
 	}
 }

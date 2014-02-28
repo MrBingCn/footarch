@@ -9,7 +9,7 @@ drop table if exists biz_order_payment;
 create table biz_address  (
    id                bigint(12) not null AUTO_INCREMENT,
    user_id           bigint(12) not null,
-   name              VARCHAR(50) not NULL,
+   name              VARCHAR(50) not null,
    mobile            VARCHAR(20),
    state             VARCHAR(50),
    city              VARCHAR(50),
@@ -62,6 +62,7 @@ create table biz_order_items  (
    id                bigint(12) not null AUTO_INCREMENT,
    order_id          bigint(12) not null,
    catentry_id       bigint(12) not null comment '商品id',
+   name              varchar(50) comment '商品名称',
    ffmcentert_id     bigint(12) comment '仓库id',
    price             decimal(12,2) not null comment '单价',
    quantity          int default 1 not null, 
