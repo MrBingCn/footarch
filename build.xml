@@ -23,7 +23,7 @@
 	
 	  <target name="make" depends="cleanup,init">
 	  	<copy todir="${dest}/src">
-	  	  <fileset dir="${common.src}" includes="**/*.java" />
+	  	  
 	  	  <fileset dir="${system.src}" includes="**/*.java" />
 	  	  <fileset dir="${footarch.src}" includes="**/*.java" />
 	    </copy>
@@ -31,16 +31,9 @@
 	      <classpath refid="project.class.path"/>
 	    </javac>
 	    <copy todir="${dest}/classes">
-	      <fileset dir="${common.src}" includes="**/*.properties,**/*.xml" />
 	      <fileset dir="${system.src}" includes="**/*.properties,**/*.xml" />
 	      <fileset dir="${footarch.src}" includes="**/*.properties,**/*.xml" />
 	      <fileset dir="${resource.src}" includes="**/*.properties,**/*.xml" />
-	    </copy>
-	    <copy todir="${dest}/classes/report">
-	      <fileset dir="${template.src}" includes="*.xls*,*.xml*" />
-	    </copy>
-	  	<copy todir="${dest}/classes/note">
-	      <fileset dir="${template.src}/../note" includes="*.xls*,*.xml*" />
 	    </copy>
 	  </target>
 	
