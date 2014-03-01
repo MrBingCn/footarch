@@ -41,6 +41,31 @@ create table biz_order  (
    total_shipping    decimal(12,2) default 0.00 not null comment '运费总金额',
    total_adjustment  decimal(12,2) default 0.00 not null comment '整单调整金额',
    total             decimal(12,2) default 0.00 not null comment '整单总金额',
+   
+   order_agent_level int comment '下订单的代理等级，1:省级代理，2:市级代理，3:区级代理，4:终端代理，5:预留代理',
+   
+   ar_amount_0       decimal(12,2) default 0.00 not null comment '零级代理/台湾工厂的 应收金额',
+   
+   agent_id_1        bigint(12) comment '一级代理/省级代理 的 id',
+   ar_amount_1       decimal(12,2) default 0.00 not null comment '一级代理/省级代理 的 应收金额',
+   
+   agent_id_2        bigint(12) comment '二级代理/市级代理 的 id',
+   ar_amount_2       decimal(12,2) default 0.00 not null comment '二级代理/市级代理 的 应收金额',
+   
+   agent_id_3        bigint(12) comment '三级代理/区级代理 的 id',
+   ar_amount_3       decimal(12,2) default 0.00 not null comment '三级代理/区级代理 的 应收金额',
+   
+   agent_id_4        bigint(12) comment '四级代理/终端代理 的 id',
+   ar_amount_4       decimal(12,2) default 0.00 not null comment '四级代理/终端代理 的 应收金额',
+   
+   agent_id_5        bigint(12) comment '五级代理/预留代理 的 id',
+   ar_amount_5       decimal(12,2) default 0.00 not null comment '五级代理/预留代理 的 应收金额',
+   
+   sale_id           bigint(12) comment '销售员，预留，用于提成，出报表',
+   sale_name         varchar(250) comment '销售员，预留，用于提成，出报表',
+   commission        decimal(12,2) default 0.00 not null comment '佣金；回扣',
+   
+   
    comments          varchar(250) comment '备注',
    payment_type      CHAR(1) default '0' NOT NULL comment '付款类型:线上支付（0），线下支付（1）', 
    status            CHAR(1) default 'P' NOT NULL comment '订单状态: 购物车（P）,已提交（M）,已支付（C），已打包（A），已发货（D），已取消（X）',
