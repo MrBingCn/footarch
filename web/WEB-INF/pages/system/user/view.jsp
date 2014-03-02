@@ -31,7 +31,7 @@ var g$v<%=view_id%> = $.extend(newView(), {
         E$("sForm").validator();
         E$("eForm").validator();
         
-        var companyOptions = filter(g$dict.Company, {record_status:'A'});
+        var companyOptions = [];//filter(g$dict.Company, {record_status:'A'});
 
         E$("userSO.company_id").combobox2({id:"userSO.company_id", 
             data:companyOptions, 

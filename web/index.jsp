@@ -67,6 +67,7 @@ boolean isHltUser = true;//sUser.isHltUser();
 
 <script type="text/javascript">
 $(function () {
+	/*
     ajax(
         root+'/biz/order_getOrderTotal.action', 
         '',
@@ -85,6 +86,7 @@ $(function () {
             }
         }
     );
+	*/
 
     var linkTemplate = "<img width='3' height='3' style='background-color: #BDE0F4'>&nbsp;<a href='{$T.ename}' target='_blank' style='color: #BDE0F4'>{$T.name}</a>&nbsp;&nbsp;&nbsp;" ;
     $(g$dict["361"]).each(function (i, elem) {

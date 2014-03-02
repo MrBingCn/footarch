@@ -99,13 +99,9 @@ boolean isDocumentView = "document".equals(type) ;
                 </li>
                 <%if(isAdminView) {%>
                 <li>
-                    <span href="#">线路管理</span>
+                    <span href="#">产品管理</span>
                     <div>
-                        <a href="javascript:openView(12, '/biz/boatCompany_view.action', '船公司管理')" tabindex="-1">船公司管理</a>
-                        <a href="javascript:openView(31, '/biz/port_view.action', '港口设置')" tabindex="-1">港口设置</a>
-                        <a href="javascript:openView(32, '/biz/line_view.action', '航线设置')" tabindex="-1">航线设置</a>
-                        <a href="javascript:openView(33, '/biz/country_view.action', '国家管理')" tabindex="-1">国家管理</a>
-                        <a href="javascript:openView(312, '/system/config_view.action', '洲管理', {sub_id:12})" tabindex="-1">洲管理</a>
+                        <a href="javascript:openView(12, '/biz/productCategory_view.action', '产品管理')" tabindex="-1">产品目录管理</a>
                     </div>
                 </li>
                 <li>
@@ -154,9 +150,6 @@ boolean isDocumentView = "document".equals(type) ;
                     <div>
                         <a href="javascript:removeAll();openView(100001, '/system/eventLog_view.action', '日志查询')" tabindex="-1">日志查询</a>
                         <a href="javascript:removeAll();openView(100002, '/system/dict_reloadView.action', '缓存刷新')" tabindex="-1">缓存刷新</a>
-                        <%if (CodeHelper.getString("LOGIN.FORWARD.ENABLED", "name_", sUser.getLogin_id()) != null) {%>
-                        <a href="javascript:removeAll();openView(100003, '/system/user_loginForward.action', '重新登录')" tabindex="-1">维护登录</a>
-                        <%} %>
                         <a href="javascript:removeAll();openView(100004, '/system/config_view.action', '快速链接1', {sub_id:361})" tabindex="-1">快速链接1</a>
                         <a href="javascript:removeAll();openView(100005, '/system/config_view.action', '快速链接2', {sub_id:362})" tabindex="-1">快速链接2</a>
                         <a href="javascript:removeAll();openView(100006, '/system/config_view.action', '快速链接3', {sub_id:363})" tabindex="-1">快速链接3</a>

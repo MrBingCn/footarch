@@ -106,6 +106,10 @@ insert into cfg_message(code_, value_)
 values('22001', '根据查询条件，未能获取报表数据！' );
 
 
+INSERT INTO `cfg_message` (`ID`, `CODE_`, `VALUE_`) VALUES ('40101', '40101', '父目录不存在，本操作无效！');
+INSERT INTO `cfg_message` (`ID`, `CODE_`, `VALUE_`) VALUES ('40102', '40102', '子目录存在，本操作无效！');
+
+
 
 
 INSERT INTO `cfg_resource` (`Key_`, `VALUE_`, `VALUE_en`)

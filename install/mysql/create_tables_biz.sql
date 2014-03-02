@@ -123,3 +123,87 @@ create table biz_order_payment  (
    
    constraint PK_BIZ_ORDER_PAYMENT primary key (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+
+
+/*==============================================================*/
+/* Table: 产品分类                                                                                                                            */
+/*==============================================================*/
+
+create table biz_product_category  (
+    id                 bigint(12)                     not null AUTO_INCREMENT,
+    pro_product_category_id bigint(12)  comment '该分类的父id，取值于该表的 cat_id字段', 
+    name_cn            VARCHAR(250)  comment '分类名称 ',
+    name_en            VARCHAR(250)  comment '分类名称 ',
+    keywords_         varchar(250)  comment '分类的关键字，可能是为了搜索 ',
+    desc_             varchar(2500)  comment '分类描述 ',
+    order_            int comment '该分类在页面显示的顺序，数字越大顺序越靠后；同数字，id在前的先显示', 
+    is_show_in_nav    int comment '是否显示在导航栏，0，不；1，显示在导航栏 ',
+    is_show           int comment '是否在前台页面显示，1，显示；0，不显示 ',
+   
+    record_status     CHAR(1) default 'A' NOT NULL,
+   
+    created_by         varchar(50) comment '创建的操作员Login_ID',
+    created_on         datetime comment '创建的时间',
+    updated_by         varchar(50) comment '更新的操作员Login_ID',
+    updated_on         datetime comment '更新的时间，同时用作version_id',
+    version_id         bigint comment '用于做DAO层的版本控制',
+    constraint PK_biz_product_category primary key (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+/*==============================================================*/
+/* Table: 产品分类                                                                                                                            */
+/*==============================================================*/
+create table biz_product  (
+    id                 bigint(12)   not null AUTO_INCREMENT,
+    product_category_id bigint(12)  comment '商品所属商品分类id，取值 ecs_category的cat_id ',
+    brand_id bigint(12)  comment '品牌id，取值于ecs_brand 的 brand_id ',
+    
+    sn varchar(50)  comment '商品的唯一货号 ',
+    name_ varchar(250)  comment '商品的名称 ',
+    name_style varchar(250)  comment '商品名称显示的样式；包括颜色和字体样式；格式如#ff00ff+strong ',
+    short_desc varchar(250)  comment '商品的简短描述 ',
+    full_desc text  comment '商品的详细描述 ',
+    keywords_ varchar(250)  comment '商品关键字，放在商品页的关键字中，为搜索引擎收录用 ',
+    main_photo_uuid varchar(250)  comment '商品在前台显示的微缩图片，如在分类筛选时显示的小图片 ',
+    
+    click_count int  comment '商品点击数 ',
+    provider_name varchar(250)  comment '供货人的名称，程序还没实现该功能 ',
+    weight_ decimal(12,2)  comment '商品的重量，以千克为单位 ',
+    
+    market_price decimal(12,2)  comment '市场售价 ',
+    selling_price decimal(12,2)  comment '本店售价 ',
+    
+    promote_price decimal(12,2)  comment '促销价格 ',
+    promote_start_on datetime  comment '促销价格开始日期 ',
+    promote_end_on datetime  comment '促销价结束日期 ',
+    
+    inventory_total_quantity int  comment '商品库存数量 ',
+    inventory_safety_quantity int  comment '商品报警数量 ',
+   
+    created_by         varchar(50) comment '创建的操作员Login_ID',
+    created_on         datetime comment '创建的时间',
+    updated_by         varchar(50) comment '更新的操作员Login_ID',
+    updated_on         datetime comment '更新的时间，同时用作version_id',
+    version_id         bigint comment '用于做DAO层的版本控制',
+    constraint PK_biz_product primary key (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+/*==============================================================*/
+/* Table: 产品分类                                                                                                                            */
+/*==============================================================*/
+create table biz_product_photo  (
+    id                 bigint(12)   not null AUTO_INCREMENT,
+    product_id bigint(12) comment '图片属于商品的id ',
+    photo_uuid varchar(250) comment '图片url ',
+    name_ varchar(250) comment '图片说明信息 ',
+    desc_ varchar(2500) comment '图片说明信息 ',
+    constraint PK_biz_product_photo primary key (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
