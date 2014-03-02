@@ -102,6 +102,7 @@ boolean isDocumentView = "document".equals(type) ;
                     <span href="#">产品管理</span>
                     <div>
                         <a href="javascript:openView(12, '/biz/productCategory_view.action', '产品管理')" tabindex="-1">产品目录管理</a>
+                        <a href="javascript:openView(13, '/biz/product_view.action', '产品管理')" tabindex="-1">产品管理</a>
                     </div>
                 </li>
                 <li>

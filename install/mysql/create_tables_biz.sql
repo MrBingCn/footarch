@@ -163,9 +163,9 @@ create table biz_product  (
     product_category_id bigint(12)  comment '商品所属商品分类id，取值 ecs_category的cat_id ',
     brand_id bigint(12)  comment '品牌id，取值于ecs_brand 的 brand_id ',
     
-    sn varchar(50)  comment '商品的唯一货号 ',
-    name_ varchar(250)  comment '商品的名称 ',
-    name_style varchar(250)  comment '商品名称显示的样式；包括颜色和字体样式；格式如#ff00ff+strong ',
+    code_ varchar(50)  comment '商品的唯一货号 ',
+    name_cn varchar(250)  comment '商品的CN名称 ',
+    name_en varchar(250)  comment '商品的EN名称 ',
     short_desc varchar(250)  comment '商品的简短描述 ',
     full_desc text  comment '商品的详细描述 ',
     keywords_ varchar(250)  comment '商品关键字，放在商品页的关键字中，为搜索引擎收录用 ',
@@ -184,6 +184,8 @@ create table biz_product  (
     
     inventory_total_quantity int  comment '商品库存数量 ',
     inventory_safety_quantity int  comment '商品报警数量 ',
+    
+    record_status     CHAR(1) default 'A' NOT NULL,
    
     created_by         varchar(50) comment '创建的操作员Login_ID',
     created_on         datetime comment '创建的时间',
@@ -201,9 +203,12 @@ create table biz_product  (
 create table biz_product_photo  (
     id                 bigint(12)   not null AUTO_INCREMENT,
     product_id bigint(12) comment '图片属于商品的id ',
+    folder_name varchar(50) comment '图片url ',
     photo_uuid varchar(250) comment '图片url ',
+    type_ varchar(250) comment '类型',
     name_ varchar(250) comment '图片说明信息 ',
     desc_ varchar(2500) comment '图片说明信息 ',
+    order_ int comment '排列顺序', 
     constraint PK_biz_product_photo primary key (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
