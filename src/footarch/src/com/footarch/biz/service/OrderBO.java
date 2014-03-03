@@ -55,6 +55,7 @@ public class OrderBO extends BaseServiceImpl {
     	OrderSO orderSO = new OrderSO();
     	orderSO.setStatus("P");
     	orderSO.setUser_id(userId);
+    	orderSO.setPageIndex(ArrayPageList.PAGEINDEX_NO_PAGE);
     	ArrayPageList<Order> orders = query(orderSO);
     	if (orders != null && orders.size() > 0) {
     		return orders.get(0);

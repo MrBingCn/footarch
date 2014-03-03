@@ -16,6 +16,7 @@ create table biz_address  (
    area              VARCHAR(50),
    address           VARCHAR(250),
    zip_code          VARCHAR(6),
+   is_default        char(1) default '0' NOT NULL comment '0:非默认，1：默认',
    status            char(1) default '0' NOT NULL comment '0:正常，1：已删除',
    
    created_by        varchar(50) comment '创建的操作员Login_ID',
