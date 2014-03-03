@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.footarch.biz.entity.Order;
 import com.footarch.biz.entity.OrderItems;
 import com.footarch.biz.entity.OrderItemsSO;
+import com.footarch.biz.entity.Product;
 import com.globalwave.base.BaseServiceImpl;
 import com.globalwave.common.ArrayPageList;
 import com.globalwave.system.entity.SessionUser;
@@ -17,11 +18,21 @@ import com.globalwave.system.entity.SessionUser;
 @Transactional
 public class OrderItemsBO extends BaseServiceImpl {
 	private OrderBO orderBO;
+	private ProductBO productBO;
 	
 	public OrderItems create(OrderItems orderItems) {
 		if (orderItems.getCatentry_id() == null || orderItems.getQuantity() == null) {
 			return null;
 		}
+		
+		Product product = productBO.get(orderItems.getCatentry_id());
+		if (product == null) {
+			return null;
+		}
+		orderItems.setName(product.getName_cn());
+		orderItems.setList_price(product.getMarket_price());
+		orderItems.setPrice(product.getSelling_price());
+		
 		if (orderItems.getOrder_id() == null) {
 			//查找购物车
 			SessionUser su = SessionUser.get();
@@ -34,6 +45,7 @@ public class OrderItemsBO extends BaseServiceImpl {
 				orderItems.setOrder_id(order.getId());
 			}
 		}
+		
 		orderItems = (OrderItems) jdbcDao.insert(orderItems);
 		orderBO.refreshTotal(orderItems.getOrder_id());
 		return orderItems;
@@ -60,5 +72,13 @@ public class OrderItemsBO extends BaseServiceImpl {
 
 	public void setOrderBO(OrderBO orderBO) {
 		this.orderBO = orderBO;
+	}
+
+	public ProductBO getProductBO() {
+		return productBO;
+	}
+
+	public void setProductBO(ProductBO productBO) {
+		this.productBO = productBO;
 	}
 }
