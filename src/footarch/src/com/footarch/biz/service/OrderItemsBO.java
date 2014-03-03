@@ -76,11 +76,24 @@ public class OrderItemsBO extends BaseServiceImpl {
 		}
 		if(order.getStatus().equals("P") || order.getStatus().equals("M")) {
 			jdbcDao.delete(orderItems);
-			orderBO.refreshTotal(orderItems.getOrder_id());
+			ArrayPageList<OrderItems> items = getItemsByOrderId(order.getId());
+			if (items.size() == 0) {
+				orderBO.delete(order, false);
+			}
+			else {
+				orderBO.refreshTotal(orderItems.getOrder_id());
+			}
 		}
 		else {
 			throw new BusinessException("order items can't delete for status:" + order.getStatus()) ;
 		}
+	}
+	
+	public ArrayPageList<OrderItems> getItemsByOrderId(Long orderId) {
+		OrderItemsSO orderItemsSO = new OrderItemsSO();
+		orderItemsSO.setOrder_id(orderId);
+		orderItemsSO.setPageIndex(ArrayPageList.PAGEINDEX_NO_PAGE);
+		return query(orderItemsSO);
 	}
 
     public ArrayPageList<OrderItems> query(

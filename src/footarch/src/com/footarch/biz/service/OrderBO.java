@@ -36,6 +36,15 @@ public class OrderBO extends BaseServiceImpl {
 		order.addInclusions("status");
 		update(order);
 	}
+
+	public void delete(Order order, boolean logic) {
+		if (logic) {
+			delete(order);
+		}
+		else {
+			jdbcDao.delete(order);
+		}
+	}
 	
     public ArrayPageList<Order> query(
     		OrderSO orderSO) {
