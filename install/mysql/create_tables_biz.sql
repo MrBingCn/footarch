@@ -156,7 +156,7 @@ create table biz_product_category  (
 
 
 /*==============================================================*/
-/* Table: 产品分类                                                                                                                            */
+/* Table: 产品                                                                                                                         */
 /*==============================================================*/
 create table biz_product  (
     id                 bigint(12)   not null AUTO_INCREMENT,
@@ -198,7 +198,7 @@ create table biz_product  (
 
 
 /*==============================================================*/
-/* Table: 产品分类                                                                                                                            */
+/* Table: 产品图片                                                                                                                          */
 /*==============================================================*/
 create table biz_product_photo  (
     id                 bigint(12)   not null AUTO_INCREMENT,
