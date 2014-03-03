@@ -24,6 +24,7 @@ public class Address extends BaseEntity {
 	private String area;
 	private String address;
 	private String zip_code;
+	private String is_default;
 	private String status;
 	
 	public Long getId() {
@@ -79,6 +80,12 @@ public class Address extends BaseEntity {
 	}
 	public void setZip_code(String zip_code) {
 		this.zip_code = zip_code;
+	}
+	public String getIs_default() {
+		return is_default;
+	}
+	public void setIs_default(String is_default) {
+		this.is_default = is_default;
 	}
 	public String getStatus() {
 		return status;
