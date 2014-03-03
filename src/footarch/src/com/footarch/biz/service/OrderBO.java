@@ -1,7 +1,7 @@
 package com.footarch.biz.service;
 
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
+//import java.text.SimpleDateFormat;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
@@ -13,7 +13,7 @@ import com.footarch.biz.entity.OrderItemsSO;
 import com.footarch.biz.entity.OrderSO;
 import com.globalwave.base.BaseServiceImpl;
 import com.globalwave.common.ArrayPageList;
-import com.globalwave.common.cache.CodeHelper;
+//import com.globalwave.common.cache.CodeHelper;
 import com.globalwave.common.exception.BusinessException;
 
 @Service("orderBO")
