@@ -40,7 +40,7 @@ create table biz_order  (
    total_product     decimal(12,2) default 0.00 not null comment '商品总金额',
    total_shipping    decimal(12,2) default 0.00 not null comment '运费总金额',
    total_adjustment  decimal(12,2) default 0.00 not null comment '整单调整金额',
-   total             decimal(12,2) default 0.00 not null comment '整单总金额',
+   total             decimal(12,2) default 0.00 not null comment '整单付款总金额',
    
    order_agent_level int comment '下订单的代理等级，1:省级代理，2:市级代理，3:区级代理，4:终端代理，5:预留代理',
    
@@ -89,7 +89,8 @@ create table biz_order_items  (
    catentry_id       bigint(12) not null comment '商品id',
    name              varchar(50) comment '商品名称',
    ffmcentert_id     bigint(12) comment '仓库id',
-   price             decimal(12,2) not null comment '单价',
+   list_price        decimal(12,2) not null comment '吊牌价',
+   price             decimal(12,2) not null comment '售价',
    quantity          int default 1 not null, 
    adjustment        decimal(12,2) default 0.00 not null comment '调整金额',
 

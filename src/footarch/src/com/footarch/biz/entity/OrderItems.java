@@ -20,6 +20,7 @@ public class OrderItems extends BaseEntity {
 	private Long catentry_id;
 	private String name;
 	private Long ffmcentert_id;
+	private Double list_price;
 	private Double price;
 	private Integer quantity;
 	private Double adjustment;
@@ -53,6 +54,12 @@ public class OrderItems extends BaseEntity {
 	}
 	public void setPrice(Double price) {
 		this.price = price;
+	}
+	public Double getList_price() {
+		return list_price;
+	}
+	public void setList_price(Double list_price) {
+		this.list_price = list_price;
 	}
 	public Integer getQuantity() {
 		return quantity;
