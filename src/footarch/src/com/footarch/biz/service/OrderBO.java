@@ -73,17 +73,11 @@ public class OrderBO extends BaseServiceImpl {
     }
     
 	//重新计算总金额
-	public void refreshTotal(Long orderId) {
-		if (orderId == null) {
-			return;
-		}
-		Order order  = get(orderId);
+	public void refreshTotal(Order order) {
 		if (order == null) {
 			return;
 		}
-		OrderItemsSO orderItemsSO = new OrderItemsSO();
-		orderItemsSO.setOrder_id(orderId);
-		ArrayPageList<OrderItems> items = orderItemsBO.query(orderItemsSO);
+		ArrayPageList<OrderItems> items = orderItemsBO.getItemsByOrderId(order.getId());
 		BigDecimal total = new BigDecimal(0);
 		BigDecimal totalAdjustment = new BigDecimal(0);
 		for (OrderItems item : items) {
@@ -100,7 +94,7 @@ public class OrderBO extends BaseServiceImpl {
 		order.setTotal(new Double(total.add(ship).subtract(totalAdjustment).doubleValue()));
 		update(order);
 	}
-
+	
 	public OrderItemsBO getOrderItemsBO() {
 		return orderItemsBO;
 	}

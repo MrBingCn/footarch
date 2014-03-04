@@ -5,8 +5,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.globalwave.base.BaseEntity;
+import com.globalwave.base.annotations.JsonSkip;
 import com.globalwave.base.annotations.Versionable;
 
 @Entity
@@ -24,6 +26,9 @@ public class OrderItems extends BaseEntity {
 	private Double price;
 	private Integer quantity;
 	private Double adjustment;
+	@Transient
+	@JsonSkip
+	private Order order;
 	
 	public Long getId() {
 		return id;
@@ -32,6 +37,9 @@ public class OrderItems extends BaseEntity {
 		this.id = id;
 	}
 	public Long getOrder_id() {
+		if (order_id == null && order != null) {
+			return order.getId();
+		}
 		return order_id;
 	}
 	public void setOrder_id(Long order_id) {
@@ -78,5 +86,11 @@ public class OrderItems extends BaseEntity {
 	}
 	public void setName(String name) {
 		this.name = name;
+	}
+	public Order getOrder() {
+		return order;
+	}
+	public void setOrder(Order order) {
+		this.order = order;
 	}
 }
