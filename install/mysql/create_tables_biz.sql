@@ -68,7 +68,7 @@ create table biz_order  (
    
    
    comments          varchar(250) comment '备注',
-   payment_type      CHAR(1) default '-1' NOT NULL comment '付款类型:线上支付（-1），线下支付（1）', 
+   payment_type      CHAR(2) default '-1' NOT NULL comment '付款类型:线上支付（-1），线下支付（1）', 
    status            CHAR(1) default 'P' NOT NULL comment '订单状态: 购物车（T）,已提交（M）,待支付（B），已支付（C），已审核（A），已打包（P），已发货（D），已取消（X）',
    status_payment    CHAR(1) default '0' NOT NULL comment '支付状态:未支付（0），已支付（1）', 
    status_checkout   CHAR(1) default '0' NOT NULL comment '出账状态:未出帐（0），可出帐（1），已出帐（2）', 
