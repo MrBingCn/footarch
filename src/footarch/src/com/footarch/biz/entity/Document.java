@@ -12,17 +12,26 @@ import javax.persistence.Transient;
 import com.globalwave.base.BaseEntity;
 import com.globalwave.base.annotations.Versionable;
 
+/**
+ * 
+ * @author Administrator
+ *
+ */
 @Entity
-@Table(name = "biz_product_photo")
+@Table(name = "biz_document")
 @Versionable
-public class ProductPhoto extends BaseEntity {
+public class Document extends BaseEntity {
+
 	
     @Id
     @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="increment")
 	private Long id;
 
-	private Long product_id;
+	private Long order_id;
 	
+	private Long  company_id  ;
+
+    
 	private String folder_name  ;
     private String file_uuid             ;
     private String document_name        ;
@@ -44,17 +53,11 @@ public class ProductPhoto extends BaseEntity {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public Long getProduct_id() {
-		return product_id;
+	public Long getOrder_id() {
+		return order_id;
 	}
-	public void setProduct_id(Long product_id) {
-		this.product_id = product_id;
-	}
-	public Long getBiz_id() {
-		return product_id;
-	}
-	public void setBiz_id(Long product_id) {
-		this.product_id = product_id;
+	public void setOrder_id(Long order_id) {
+		this.order_id = order_id;
 	}
 	public String getFile_uuid() {
 		return file_uuid;
@@ -104,6 +107,13 @@ public class ProductPhoto extends BaseEntity {
 	public void setDocument_file(File document_file) {
 		this.document_file = document_file;
 	}
+	public Long getCompany_id() {
+		return company_id;
+	}
+	public void setCompany_id(Long company_id) {
+		this.company_id = company_id;
+	}
+	
 	
 }
 

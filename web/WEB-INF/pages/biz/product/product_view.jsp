@@ -96,6 +96,11 @@ var g$v<%=view_id%> = $.extend(newView(), {
     		} 
     		V("product.version_id", _data.version_id);
     	});
+    } ,
+    
+    photoUpload:function(){
+    	uploader.url = "/biz/productPhoto" ;
+    	uploader.show(V("product.id"), 'P', 'photoDisplayDiv');	
     }
 }) ;
 
@@ -232,6 +237,21 @@ var g$v<%=view_id%> = $.extend(newView(), {
                 <td>
                 </td>
               </tr>
+              <tr>
+                <td class="label">图片：</td>
+                <td>
+                  <button type="button" onclick="viewJs.photoUpload();">上传</button>
+                </td>
+                <td class="label"></td>
+                <td>
+                </td>
+              </tr>
+              <tr>
+                <td colspan="4">
+                  <div id="photoDisplayDiv"></div>
+                </td>
+              </tr>
+              
             </table> 
           </td>
           <td width="5%"></td>
@@ -256,7 +276,6 @@ var g$v<%=view_id%> = $.extend(newView(), {
     </table>
     
     
-    
   </div>
   
   <!-- 
@@ -265,3 +284,5 @@ var g$v<%=view_id%> = $.extend(newView(), {
   </div>
    -->
 </div>
+
+    <%@include file="/WEB-INF/pages/biz/document/upload_form.jsp" %>

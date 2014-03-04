@@ -48,7 +48,7 @@ public class ProductPhotoBO extends BaseServiceImpl {
         
     	String dest = destBase + productPhoto.getFile_uuid() ;
     	
-    	if(!productPhoto.getPhoto_file().renameTo(new File(dest))) {
+    	if(!productPhoto.getDocument_file().renameTo(new File(dest))) {
     		log.error("file can't write to '" + dest + "'") ;
     		throw new BusinessException(20009L) ;//文件不能写入，请重新上传！
     	}

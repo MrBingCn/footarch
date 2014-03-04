@@ -18,20 +18,20 @@ import com.globalwave.common.cache.CodeHelper;
 import com.globalwave.common.entity.EventLog;
 import com.globalwave.common.service.EventLogBO;
 import com.globalwave.system.web.annotations.Pid;
-import com.footarch.biz.entity.ProductPhoto;
-import com.footarch.biz.entity.ProductSO;
-import com.footarch.biz.service.ProductPhotoBO;
+import com.footarch.biz.entity.Document;
+import com.footarch.biz.entity.DocumentSO;
+import com.footarch.biz.service.DocumentBO;
 import com.opensymphony.xwork2.Preparable;
 
-@Service("biz_productPhotoAction")
+@Service("biz_documentAction")
 @Scope("prototype")
-public class ProductPhotoAction extends BaseAction implements Preparable {
+public class DocumentAction extends BaseAction implements Preparable {
 
     private static final long serialVersionUID = 7244882365197775441L;
     
-    private ProductPhotoBO productPhotoBO ;
-    private ProductPhoto document ;
-    private ProductSO documentSO ; 
+    private DocumentBO documentBO ;
+    private Document document ;
+    private DocumentSO documentSO ; 
     
     public String execute() throws Exception {        
         return this.list();        
@@ -40,7 +40,7 @@ public class ProductPhotoAction extends BaseAction implements Preparable {
     @Pid(value=1071,log=false)
     public String list() throws Exception {  
 
-        ArrayPageList<ProductPhoto> pageList = productPhotoBO.query(documentSO) ;
+        ArrayPageList<Document> pageList = documentBO.query(documentSO) ;
 
         renderList(pageList) ; 
         
@@ -51,7 +51,7 @@ public class ProductPhotoAction extends BaseAction implements Preparable {
     @Pid(value=1071,log=false)
     public String get() throws Exception {  
 
-    	ProductPhoto org = productPhotoBO.get(this.id) ;
+    	Document org = documentBO.get(this.id) ;
 
     	renderObject(org, null) ; 
         return null ;  
@@ -62,11 +62,11 @@ public class ProductPhotoAction extends BaseAction implements Preparable {
     public String create()  throws Exception {        
 
     	try {
-	        Object newProductPhoto = productPhotoBO.create(document) ;
+	        Object newDocument = documentBO.create(document) ;
 	
-	        //renderObject(newProductPhoto, ResponseMessage.KEY_CREATE_OK) ;
+	        //renderObject(newDocument, ResponseMessage.KEY_CREATE_OK) ;
 	
-			ResponseMessage msg = new ResponseMessage(newProductPhoto, ResponseMessage.KEY_CREATE_OK) ;
+			ResponseMessage msg = new ResponseMessage(newDocument, ResponseMessage.KEY_CREATE_OK) ;
 			
 			renderHtml("<script>parent.uploader.uploadOnReturn(" + msg.asJson() + ");</script>") ;
     	} catch (Exception e) {
@@ -86,11 +86,11 @@ public class ProductPhotoAction extends BaseAction implements Preparable {
     public String createByAjax()  throws Exception {        
 
     	try {
-	        Object newProductPhoto = productPhotoBO.create(document) ;
+	        Object newDocument = documentBO.create(document) ;
 	
-	        //renderObject(newProductPhoto, ResponseMessage.KEY_CREATE_OK) ;
+	        //renderObject(newDocument, ResponseMessage.KEY_CREATE_OK) ;
 	
-			ResponseMessage msg = new ResponseMessage(newProductPhoto, ResponseMessage.KEY_CREATE_OK) ;
+			ResponseMessage msg = new ResponseMessage(newDocument, ResponseMessage.KEY_CREATE_OK) ;
 			renderJson(msg.asJson()) ;
 			//renderHtml("<script>parent.uploader.uploadOnReturn(" + msg.asJson() + ");</script>") ;
     	} catch (Exception e) {
@@ -113,7 +113,7 @@ public class ProductPhotoAction extends BaseAction implements Preparable {
     public String download() throws Exception {  
     	
     	try {
-	    	ProductPhoto doc = productPhotoBO.getDownloadProductPhoto(this.id) ;
+	    	Document doc = documentBO.getDownloadDocument(this.id) ;
 	
 
 	    	EventLog eventLog = new EventLog() ;
@@ -122,7 +122,7 @@ public class ProductPhotoAction extends BaseAction implements Preparable {
 	    	eventLog.setExt_c2(doc.getDocument_name()) ;
 	    	eventLog.setExt_c3(doc.getDocument_type()) ;
 	    	eventLog.setEvent_type_code("ACTION") ;
-	    	getEventLogBO().create(eventLog, doc.getProduct_id()) ;
+	    	getEventLogBO().create(eventLog, doc.getOrder_id()) ;
 	    	
 	    	String fileName = doc.getFolder_name() + doc.getFile_uuid() ;
 	        java.io.File f = new java.io.File(fileName) ;
@@ -172,7 +172,7 @@ public class ProductPhotoAction extends BaseAction implements Preparable {
     @Pid(value=1071)
     public String update()  throws Exception {
     	
-        productPhotoBO.update(document) ;
+        documentBO.update(document) ;
         
         renderObject(document, ResponseMessage.KEY_UPDATE_OK) ;
         
@@ -184,7 +184,7 @@ public class ProductPhotoAction extends BaseAction implements Preparable {
     @Pid(value=1071)
     public String delete()  throws Exception {
 
-        productPhotoBO.delete(document) ;
+        documentBO.delete(document) ;
         
         renderObject(document, ResponseMessage.KEY_DELETE_OK) ;
         
@@ -192,24 +192,29 @@ public class ProductPhotoAction extends BaseAction implements Preparable {
         
     }
    
-    public void setProductPhotoBO(ProductPhotoBO productPhotoBO) {
-		this.productPhotoBO = productPhotoBO;
+    public void prepare() throws Exception {
+        // TODO Auto-generated method stub
+        
+    }
+
+    public void setDocumentBO(DocumentBO documentBO) {
+		this.documentBO = documentBO;
 	}
 
-    public ProductPhoto getDocument() {
+    public Document getDocument() {
         return document;
     }
 
-    public void setDocument(ProductPhoto productPhoto) {
-        this.document = productPhoto;
+    public void setDocument(Document document) {
+        this.document = document;
     }
 
-    public ProductSO getDocumentSO() {
+    public DocumentSO getDocumentSO() {
         return documentSO;
     }
 
-    public void setDocumentSO(ProductSO productPhotoSO) {
-        this.documentSO = productPhotoSO;
+    public void setDocumentSO(DocumentSO documentSO) {
+        this.documentSO = documentSO;
     }
 
     public EventLogBO getEventLogBO() {
