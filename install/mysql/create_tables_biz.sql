@@ -39,8 +39,11 @@ create table biz_order  (
    time_pay          datetime comment '支付时间',
    time_checkout     datetime comment '出账时间',
    total_product     decimal(12,2) default 0.00 not null comment '商品总金额',
-   total_shipping    decimal(12,2) default 0.00 not null comment '运费总金额',
-   total_adjustment  decimal(12,2) default 0.00 not null comment '整单调整金额',
+   ship              decimal(12,2) default 0.00 not null comment '运费金额',
+   adjustment_ship   decimal(12,2) default 0.00 not null comment '运费调整金额',
+   adjustment_product decimal(12,2) default 0.00 not null comment '商品调整金额',
+   adjustment_order  decimal(12,2) default 0.00 not null comment '订单调整金额',
+   adjustment_manual decimal(12,2) default 0.00 not null comment '手工调整金额',
    total             decimal(12,2) default 0.00 not null comment '整单付款总金额',
    
    order_agent_level int comment '下订单的代理等级，1:省级代理，2:市级代理，3:区级代理，4:终端代理，5:预留代理',
@@ -67,7 +70,8 @@ create table biz_order  (
    commission        decimal(12,2) default 0.00 not null comment '佣金；回扣',
    
    
-   comments          varchar(250) comment '备注',
+   comments          varchar(250) comment '客户备注',
+   remark            varchar(250) comment '客服备注',
    payment_type      CHAR(2) default '-1' NOT NULL comment '付款类型:线上支付（-1），线下支付（1）', 
    status            CHAR(1) default 'P' NOT NULL comment '订单状态: 购物车（T）,已提交（M）,已支付（C），已审核（A），已打包（P），已发货（D），已取消（X）',
    status_payment    CHAR(1) default '0' NOT NULL comment '支付状态:未支付（0），已支付（1）', 
