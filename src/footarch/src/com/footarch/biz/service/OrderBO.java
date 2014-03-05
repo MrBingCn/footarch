@@ -62,7 +62,7 @@ public class OrderBO extends BaseServiceImpl {
     
     public Order getShopCar(Long userId) { 
     	OrderSO orderSO = new OrderSO();
-    	orderSO.setStatus("P");
+    	orderSO.setStatus("T");
     	orderSO.setUser_id(userId);
     	orderSO.setPageIndex(ArrayPageList.PAGEINDEX_NO_PAGE);
     	ArrayPageList<Order> orders = query(orderSO);
@@ -78,20 +78,25 @@ public class OrderBO extends BaseServiceImpl {
 			return;
 		}
 		ArrayPageList<OrderItems> items = orderItemsBO.getItemsByOrderId(order.getId());
-		BigDecimal total = new BigDecimal(0);
-		BigDecimal totalAdjustment = new BigDecimal(0);
+		BigDecimal total_product = new BigDecimal(0);
+		BigDecimal adjustment_product = new BigDecimal(0);
 		for (OrderItems item : items) {
 			BigDecimal price = new BigDecimal(Double.toString(item.getPrice().doubleValue()));
 			BigDecimal quantity = new BigDecimal(String.valueOf(item.getQuantity().intValue()));
 			BigDecimal adjustment = new BigDecimal(Double.toString(item.getAdjustment().doubleValue()));
-			total.add(price.multiply(quantity));
-			totalAdjustment.add(adjustment);
+			total_product = total_product.add(price.multiply(quantity));
+			adjustment_product = adjustment_product.add(adjustment);
 		}
 		
-		order.setTotal_product(new Double(total.doubleValue()));
-		order.setTotal_adjustment(new Double(totalAdjustment.doubleValue()));
-		BigDecimal ship = new BigDecimal(Double.toString(order.getTotal_shipping().doubleValue()));
-		order.setTotal(new Double(total.add(ship).subtract(totalAdjustment).doubleValue()));
+		order.setTotal_product(new Double(total_product.doubleValue()));
+		order.setAdjustment_product(new Double(adjustment_product.doubleValue()));
+		
+		BigDecimal ship = new BigDecimal(Double.toString(order.getShip().doubleValue()));
+		BigDecimal adjustment_ship = new BigDecimal(Double.toString(order.getAdjustment_ship().doubleValue()));
+		BigDecimal adjustment_order = new BigDecimal(Double.toString(order.getAdjustment_order().doubleValue()));
+		BigDecimal adjustment_manual = new BigDecimal(Double.toString(order.getAdjustment_manual().doubleValue()));
+		
+		order.setTotal(new Double(total_product.add(ship).add(adjustment_product).add(adjustment_ship).add(adjustment_order).add(adjustment_manual).doubleValue()));
 		update(order);
 	}
 	

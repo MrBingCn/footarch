@@ -25,10 +25,14 @@ public class Order extends BaseEntity {
 	private Timestamp time_checkout;//'出账时间'
 	
 	private Double total_product;//'商品总金额'
-	private Double total_shipping;//'运费总金额'
-	private Double total_adjustment;//'整单调整金额'
+	private Double ship;//'运费金额'
+	private Double adjustment_product;
+	private Double adjustment_ship;
+	private Double adjustment_order;
+	private Double adjustment_manual;
 	private Double total;//'整单总金额'
 	private String comments;
+	private String remark;
 	private String payment_type;//'付款类型:线上支付（0），线下支付（1）'
 	private String status;//'订单状态: 购物车（P）,已提交（M）,已支付（C），已打包（A），已发货（D），已取消（X）'
 	private String status_payment;//'支付状态:未支付（0），已支付（1）'
@@ -76,17 +80,41 @@ public class Order extends BaseEntity {
 	public void setTotal_product(Double total_product) {
 		this.total_product = total_product;
 	}
-	public Double getTotal_shipping() {
-		return total_shipping;
+	public Double getShip() {
+		return ship;
 	}
-	public void setTotal_shipping(Double total_shipping) {
-		this.total_shipping = total_shipping;
+	public void setShip(Double ship) {
+		this.ship = ship;
 	}
-	public Double getTotal_adjustment() {
-		return total_adjustment;
+	public Double getAdjustment_product() {
+		return adjustment_product;
 	}
-	public void setTotal_adjustment(Double total_adjustment) {
-		this.total_adjustment = total_adjustment;
+	public void setAdjustment_product(Double adjustment_product) {
+		this.adjustment_product = adjustment_product;
+	}
+	public Double getAdjustment_ship() {
+		return adjustment_ship;
+	}
+	public void setAdjustment_ship(Double adjustment_ship) {
+		this.adjustment_ship = adjustment_ship;
+	}
+	public Double getAdjustment_order() {
+		return adjustment_order;
+	}
+	public void setAdjustment_order(Double adjustment_order) {
+		this.adjustment_order = adjustment_order;
+	}
+	public Double getAdjustment_manual() {
+		return adjustment_manual;
+	}
+	public void setAdjustment_manual(Double adjustment_manual) {
+		this.adjustment_manual = adjustment_manual;
+	}
+	public String getRemark() {
+		return remark;
+	}
+	public void setRemark(String remark) {
+		this.remark = remark;
 	}
 	public Double getTotal() {
 		return total;
