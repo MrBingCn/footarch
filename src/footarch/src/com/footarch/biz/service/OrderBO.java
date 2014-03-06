@@ -1,6 +1,9 @@
 package com.footarch.biz.service;
 
 import java.math.BigDecimal;
+import java.sql.Timestamp;
+import java.util.HashMap;
+import java.util.Map;
 //import java.text.SimpleDateFormat;
 
 import org.springframework.context.annotation.Scope;
@@ -11,9 +14,11 @@ import com.footarch.biz.entity.Order;
 import com.footarch.biz.entity.OrderItems;
 import com.footarch.biz.entity.OrderItemsSO;
 import com.footarch.biz.entity.OrderSO;
+import com.footarch.biz.entity.Payment;
 import com.globalwave.base.BaseServiceImpl;
 import com.globalwave.common.ArrayPageList;
 //import com.globalwave.common.cache.CodeHelper;
+import com.globalwave.common.cache.CodeHelper;
 import com.globalwave.common.exception.BusinessException;
 
 @Service("orderBO")
@@ -100,11 +105,42 @@ public class OrderBO extends BaseServiceImpl {
 		update(order);
 	}
 	
+	public void notifyPay(Long pid) {
+		Payment payment = getPaymentBO().get(pid);
+		if (payment != null) {
+			Order order = get(payment.getOrder_id()) ;
+			if (order.getStatus().equals("M")) {
+				Timestamp current = new Timestamp(System.currentTimeMillis());
+				order.setStatus("C");
+				order.setTime_pay(current);
+				order.setStatus_payment("1");
+				update(order);
+				
+				payment.setApproved_amount(order.getTotal());
+				payment.setApproving_amount(new Double(0));
+				payment.setStatus("1");
+				payment.setTime_pay(current);
+				getPaymentBO().update(payment);
+			}
+		}
+	}
+	
+	public ArrayPageList<Map<String, Object>> getOrder(OrderSO orderSO, String sqlName) {
+		if (orderSO.getOrderby() == null) {
+			orderSO.setOrderby("order by id desc");
+		}
+		return (ArrayPageList<Map<String, Object>>) jdbcDao.queryName(sqlName, orderSO, HashMap.class);
+	}
+	
 	public OrderItemsBO getOrderItemsBO() {
 		return orderItemsBO;
 	}
 
 	public void setOrderItemsBO(OrderItemsBO orderItemsBO) {
 		this.orderItemsBO = orderItemsBO;
+	}
+	
+	public PaymentBO getPaymentBO() {
+		return (PaymentBO)CodeHelper.getAppContext().getBean("paymentBO");
 	}
 }

@@ -24,7 +24,7 @@ public class Payment extends BaseEntity {
 	private Double approved_amount;
 	private String pay_system_name;
 	private Timestamp time_pay;
-	private String last;
+	private String status;
 	
 	public Long getId() {
 		return id;
@@ -68,10 +68,10 @@ public class Payment extends BaseEntity {
 	public void setTime_pay(Timestamp time_pay) {
 		this.time_pay = time_pay;
 	}
-	public String getLast() {
-		return last;
+	public String getStatus() {
+		return status;
 	}
-	public void setLast(String last) {
-		this.last = last;
+	public void setStatus(String status) {
+		this.status = status;
 	}
 }
