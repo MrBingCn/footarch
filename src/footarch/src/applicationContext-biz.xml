@@ -5,13 +5,18 @@
     <bean id="bizSQLs" class="com.globalwave.common.db.BaseSQLs" >
       <property name="sqls">
         <map>
-          <entry key="lastTargetPort">
+          <entry key="orders">
             <value>
               <![CDATA[
-select distinct(port_target) as port from biz_order where company_id=[company_id] order by created_on desc limit 5
+select o.id,o.time_place,o.total,o.pay_system_name,o.status from biz_order o where 1=1   
+   {and o.user_id=[user_id]} 
+   {and o.status=[status]} 
+   {and o.status in ([inStatus])} 
+   {and o.status not in ([notInStatus])} 
+<<orderby>>
               ]]>
             </value>
-          </entry>   
+          </entry>
           
           
           
