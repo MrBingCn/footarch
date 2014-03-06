@@ -34,6 +34,7 @@ public class Order extends BaseEntity {
 	private String comments;
 	private String remark;
 	private String payment_type;//'付款类型:线上支付（0），线下支付（1）'
+	private String pay_system_name;
 	private String status;//'订单状态: 购物车（P）,已提交（M）,已支付（C），已打包（A），已发货（D），已取消（X）'
 	private String status_payment;//'支付状态:未支付（0），已支付（1）'
 	private String status_checkout;//'出账状态:未出帐（0），可出帐（1），已出帐（2）'
@@ -133,6 +134,12 @@ public class Order extends BaseEntity {
 	}
 	public void setPayment_type(String payment_type) {
 		this.payment_type = payment_type;
+	}
+	public String getPay_system_name() {
+		return pay_system_name;
+	}
+	public void setPay_system_name(String pay_system_name) {
+		this.pay_system_name = pay_system_name;
 	}
 	public String getStatus() {
 		return status;
