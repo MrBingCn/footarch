@@ -18,9 +18,10 @@ var uploader = $.extend(uploader_parent, {
 		this.form.reset();
 		this.form.action= root + this.url + "_create.action" ;
 		this.$form.validator();
-
-	    $("#document.biz_id", this.$form).val(biz_id) ;
-	    $("document.document_type", this.$form).val(document_type) ;
+		
+	    $("#document\\.biz_id", this.$form).val(biz_id) ;
+	    alert($("#document\\.biz_id").val());
+	    $("document\\.document_type", this.$form).val(document_type) ;
 	    
 	    this.documentsDiv = E(documentsDivId) ;
 	    
@@ -110,7 +111,7 @@ var uploader = $.extend(uploader_parent, {
 	        return ;
 	    }
 	
-	    var isAdd = $("document.id", this.$form).val()=="" ;
+	    var isAdd = $("document\\.id", this.$form).val()=="" ;
 	    
 		//var _url = isAdd?"<%=root %>/biz/document_create.action":"";
 	

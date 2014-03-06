@@ -85,6 +85,7 @@ margin-right:5px;
 var uploader_parent = {
 	getHtml:function(data) {
 	    return '<div>' 
+	            + '  <img src="<%=root %>/photo/' + data.folder_name + '/' + data.file_uuid + '"/>'
 			    + '  <a onclick="uploader.download('+data.id+');" style="cursor:pointer;">'+data.document_name+'</a>'
 			    + '&nbsp;&nbsp;<a onclick="uploader.doDelete('+data.id+', this);" style="cursor:pointer;color:blue;">删除</a>'
 			    + '</div>' ;

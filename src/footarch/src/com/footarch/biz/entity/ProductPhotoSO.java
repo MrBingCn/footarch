@@ -5,7 +5,7 @@ import javax.persistence.Column;
 import com.globalwave.base.BaseSO;
 
 
-public class ProductSO extends BaseSO {
+public class ProductPhotoSO extends BaseSO {
 
     @Column(name="id")
     private Long[] ids ;
@@ -61,7 +61,7 @@ public class ProductSO extends BaseSO {
 
 	@Override
 	public Class<?> getTableClass() {
-		return Product.class;
+		return ProductPhoto.class;
 	}
 	
 }

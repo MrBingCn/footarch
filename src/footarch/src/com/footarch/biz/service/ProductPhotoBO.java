@@ -1,7 +1,6 @@
 package com.footarch.biz.service;
 
 import java.io.File;
-import java.util.UUID;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.logging.Log;
@@ -12,11 +11,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.globalwave.base.BaseServiceImpl;
 import com.globalwave.common.ArrayPageList;
-import com.globalwave.common.U;
 import com.globalwave.common.cache.CodeHelper;
 import com.globalwave.common.exception.BusinessException;
+import com.footarch.biz.entity.Product;
 import com.footarch.biz.entity.ProductPhoto;
-import com.footarch.biz.entity.ProductSO;
+import com.footarch.biz.entity.ProductPhotoSO;
 
 
 @Service("productPhotoBO")
@@ -28,12 +27,18 @@ public class ProductPhotoBO extends BaseServiceImpl {
 	
     public ProductPhoto create(ProductPhoto productPhoto) {  
 
-    	productPhoto.setFile_uuid(UUID.randomUUID().toString()) ;
-    	productPhoto.setFolder_name(U.yyyyMMdd(U.currentDate()).substring(0, 6)) ;
+    	Long product_id = productPhoto.getProduct_id();
+    	
+    	String sql = "select ifnull(max(file_uuid) + 1, 1) from biz_product_photo where product_id=?" ;
+    	productPhoto.setFile_uuid(this.jdbcDao.getString(sql, new Object[]{product_id})) ;
+    	
+    	productPhoto.setFolder_name(String.valueOf(product_id % 100) + "/" + product_id) ;
     	
         ProductPhoto newItem = (ProductPhoto) jdbcDao.insert(productPhoto) ;
         
-    	String destBase = CodeHelper.getWebConfig("realPath") + "/upload/" + productPhoto.getFolder_name() + "/" ;
+        this.updateProductMainUUID(product_id);
+        
+    	String destBase = CodeHelper.getWebConfig("realPath") + "/photo/" + productPhoto.getFolder_name() + "/" ;
     	
         File baseFile = new File(destBase);
         if (!baseFile.exists()) {
@@ -56,9 +61,32 @@ public class ProductPhotoBO extends BaseServiceImpl {
         return newItem;
     }
     
+    private void updateProductMainUUID(long product_id) {
+    	ProductPhotoSO productPhotoSO = new ProductPhotoSO();
+    	productPhotoSO.setProduct_id(product_id);
+    	productPhotoSO.setPageIndex(ArrayPageList.PAGEINDEX_NO_PAGE) ;
+    	ArrayPageList<ProductPhoto> productPhotos = this.query(productPhotoSO) ;
+    	
+    	String result = "" ;
+    	for (ProductPhoto p:productPhotos) {
+    		if (result.length() != 0) {
+    			result += ',';
+    		}
+    		result += p.getFile_uuid() ;
+    	}
+    	
+        Product product = new Product() ;
+        product.setId(product_id) ;
+        product.setMain_photo_uuid(result) ;
+        product.addInclusions("main_photo_uuid") ;
+        product.setOperate(Product.OPERATE_UPDATE_UNVERSION);
+        
+        jdbcDao.update(product) ;
+    }
+    
     public ProductPhoto getDownloadProductPhoto(Long id) {
     	ProductPhoto productPhoto = this.get(id) ;
-    	String destBase = CodeHelper.getWebConfig("realPath") + "/upload/" + productPhoto.getFolder_name() + "/" ;
+    	String destBase = CodeHelper.getWebConfig("realPath") + "/photo/" + productPhoto.getFolder_name() + "/" ;
     	productPhoto.setFolder_name(destBase) ;
     	return  productPhoto;
     }
@@ -76,22 +104,21 @@ public class ProductPhotoBO extends BaseServiceImpl {
     	productPhoto = (ProductPhoto)jdbcDao.get(productPhoto) ;
     	jdbcDao.delete(productPhoto) ;
     	
-    	String destBase = CodeHelper.getWebConfig("realPath") + "/upload/" + productPhoto.getFolder_name() + "/" ;
+        this.updateProductMainUUID(productPhoto.getProduct_id());
+    	
+    	String destBase = CodeHelper.getWebConfig("realPath") + "/photo/" + productPhoto.getFolder_name() + "/" ;
 
     	new File(destBase + productPhoto.getFile_uuid()).delete() ;        
     }
 
     
-    public ArrayPageList<ProductPhoto> query(ProductSO productPhotoSO) {
+    public ArrayPageList<ProductPhoto> query(ProductPhotoSO productPhotoSO) {
 
         if (productPhotoSO == null) {
-        	productPhotoSO = new ProductSO() ;
+        	productPhotoSO = new ProductPhotoSO() ;
         }
-        productPhotoSO.addAsc("order_") ;
-        productPhotoSO.addAsc("company_id") ;
-        productPhotoSO.addAsc("productPhoto_type") ;
-        productPhotoSO.addAsc("productPhoto_name") ;
         
+        productPhotoSO.addAsc("order_") ;
         
         return (ArrayPageList<ProductPhoto>)jdbcDao.query(productPhotoSO, ProductPhoto.class);
     }

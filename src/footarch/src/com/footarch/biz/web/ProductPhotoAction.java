@@ -19,7 +19,7 @@ import com.globalwave.common.entity.EventLog;
 import com.globalwave.common.service.EventLogBO;
 import com.globalwave.system.web.annotations.Pid;
 import com.footarch.biz.entity.ProductPhoto;
-import com.footarch.biz.entity.ProductSO;
+import com.footarch.biz.entity.ProductPhotoSO;
 import com.footarch.biz.service.ProductPhotoBO;
 import com.opensymphony.xwork2.Preparable;
 
@@ -31,7 +31,7 @@ public class ProductPhotoAction extends BaseAction implements Preparable {
     
     private ProductPhotoBO productPhotoBO ;
     private ProductPhoto document ;
-    private ProductSO documentSO ; 
+    private ProductPhotoSO documentSO ; 
     
     public String execute() throws Exception {        
         return this.list();        
@@ -204,11 +204,11 @@ public class ProductPhotoAction extends BaseAction implements Preparable {
         this.document = productPhoto;
     }
 
-    public ProductSO getDocumentSO() {
+    public ProductPhotoSO getDocumentSO() {
         return documentSO;
     }
 
-    public void setDocumentSO(ProductSO productPhotoSO) {
+    public void setDocumentSO(ProductPhotoSO productPhotoSO) {
         this.documentSO = productPhotoSO;
     }
 

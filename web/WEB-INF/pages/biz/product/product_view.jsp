@@ -70,6 +70,9 @@ var g$v<%=view_id%> = $.extend(newView(), {
              //this.refreshCustomerServiceRep() ;
              return ;
         }
+        
+        var _this = this;
+        
         var idProperty = (this.idName==null?"id":this.idName) ;
         var params = {} ;
         params[idProperty] = id ;
@@ -80,8 +83,18 @@ var g$v<%=view_id%> = $.extend(newView(), {
                 viewJs.entity = data;
                 formDeserialize("eForm", data, {}) ;
                 //viewJs.refreshCustomerServiceRep() ;
+                _this.showPhotos(data.id, data.main_photo_uuid)
             }
         );
+    },
+    
+    showPhotos:function(productId, ids) {
+    	var idArr = ids.split(",");
+    	var $photoDisplayDiv = E$("photoDisplayDiv") ;
+    	for (var i = 0 ; i < idArr.length ; i ++)
+  		{
+    		$photoDisplayDiv.append('<img src="' + root + '/photo/' + (productId%100) + '/' + productId + '/' +idArr[i] +'"/>');
+  		}
     },
     
     saveNotList:function () {
