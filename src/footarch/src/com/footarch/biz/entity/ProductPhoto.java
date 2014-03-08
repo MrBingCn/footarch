@@ -34,9 +34,12 @@ public class ProductPhoto extends BaseEntity {
     private String record_status        ;
     
     private Integer order_ ;
-    
+
     @Transient
     private File document_file ;
+    
+    @Transient
+    private String product_uuids ;
     
 	public Long getId() {
 		return id;
@@ -103,6 +106,12 @@ public class ProductPhoto extends BaseEntity {
 	}
 	public void setDocument_file(File document_file) {
 		this.document_file = document_file;
+	}
+	public String getProduct_uuids() {
+		return product_uuids;
+	}
+	public void setProduct_uuids(String product_uuid) {
+		this.product_uuids = product_uuid;
 	}
 	
 }

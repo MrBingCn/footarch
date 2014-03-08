@@ -524,7 +524,7 @@ var swfUploadHandler = {
 	    
 	    
 	            // 按钮的处理  
-	            button_image_url : "../plugin/SWFUpload/FullyTransparent_65x29.png",  
+	            button_image_url : root + "/plugin/SWFUpload/FullyTransparent_65x29.png",  
 	            button_placeholder_id : "spanButtonPlaceholder1",  
 	            button_text : "<button type=\"button\">选择多个文件</button>",  
 	            button_width: 100,  

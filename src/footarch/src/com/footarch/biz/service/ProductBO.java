@@ -6,7 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.globalwave.base.BaseServiceImpl;
 import com.globalwave.common.ArrayPageList;
-import com.globalwave.common.C;
+import com.globalwave.common.cache.CodeHelper;
 import com.globalwave.common.exception.BusinessException;
 import com.footarch.biz.entity.Product;
 import com.footarch.biz.entity.ProductSO;
@@ -26,9 +26,13 @@ public class ProductBO extends BaseServiceImpl {
     }
     
     public void delete(Product product) {
+    	/*
     	product.addInclusions("record_status") ;
     	product.setRecord_status(C.RECORD_STATUS_CANCEL) ;
         jdbcDao.update(product) ;
+        */
+        jdbcDao.delete(product) ;
+        getProductPhotoBO().deleteByProductId(product.getId()) ;
     }
     
     public void delete(Long[] ids){
@@ -36,7 +40,12 @@ public class ProductBO extends BaseServiceImpl {
     	so.setIds(ids) ;
     	//country.addInclusions("record_status") ;
     	//country.setRecord_status(C.RECORD_STATUS_CANCEL) ;
-        jdbcDao.executeName("bizSQLs:deleteProducts", so) ;
+        jdbcDao.delete(Product.class, so) ;
+
+        ProductPhotoBO bo = getProductPhotoBO() ;
+        for (Long id:ids){	
+        	bo.deleteByProductId(id);
+        }
     }
     
     public ArrayPageList<Product> query(ProductSO productSO) {
@@ -59,5 +68,9 @@ public class ProductBO extends BaseServiceImpl {
         product = (Product) jdbcDao.get(product) ;
                 
         return product;
+    }
+    
+    private ProductPhotoBO getProductPhotoBO() {
+    	return (ProductPhotoBO)CodeHelper.getAppContext().getBean("productPhotoBO") ;
     }
 }

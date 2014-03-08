@@ -33,6 +33,10 @@ public class DocumentAction extends BaseAction implements Preparable {
     private Document document ;
     private DocumentSO documentSO ; 
     
+    public String uploadForm() throws Exception{
+    	return "jsp";
+    }
+    
     public String execute() throws Exception {        
         return this.list();        
     }

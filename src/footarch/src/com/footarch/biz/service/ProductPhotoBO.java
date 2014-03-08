@@ -35,12 +35,12 @@ public class ProductPhotoBO extends BaseServiceImpl {
     	String sql = "select ifnull(max(file_uuid) + 1, 1) from biz_product_photo where product_id=?" ;
     	productPhoto.setFile_uuid(this.jdbcDao.getString(sql, new Object[]{product_id})) ;
     	
-    	productPhoto.setFolder_name(String.valueOf(product_id % 100) + "/" + product_id) ;
+    	productPhoto.setFolder_name(getFolderName(product_id)) ;
     	productPhoto.setDocument_type("p") ;
     	
         ProductPhoto newItem = (ProductPhoto) jdbcDao.insert(productPhoto) ;
         
-        this.updateProductMainUUID(product_id);
+        newItem.setProduct_uuids(this.updateProductMainUUID(product_id));
         
     	String destBase = CodeHelper.getWebConfig("realPath") + "/photo/" + productPhoto.getFolder_name() + "/" ;
     	
@@ -65,7 +65,7 @@ public class ProductPhotoBO extends BaseServiceImpl {
     	ImageThumbnailBuilder builder = new ImageThumbnailBuilder() ;
     	//CodeHelper.getLong("", columnName, id)
     	try {
-			builder.build(destFile, dest, 60, new File(dest + ".t"), Image.SCALE_SMOOTH, 0.8f);
+			builder.build(destFile, dest, 100, new File(dest + ".t"), Image.SCALE_SMOOTH, 0.8f);
 		} catch (IOException e) {
     		log.error("ImageThumbnailBuilder", e) ;
     		throw new BusinessException(20009L) ;//文件不能写入，请重新上传！
@@ -74,11 +74,15 @@ public class ProductPhotoBO extends BaseServiceImpl {
         return newItem;
     }
     
-    private void updateProductMainUUID(long product_id) {
+    
+    private String getFolderName(Long product_id) {
+    	return String.valueOf(product_id % 100) + "/" + product_id ;
+    }
+    private String updateProductMainUUID(long product_id) {
     	ProductPhotoSO productPhotoSO = new ProductPhotoSO();
     	productPhotoSO.setProduct_id(product_id);
     	productPhotoSO.setPageIndex(ArrayPageList.PAGEINDEX_NO_PAGE) ;
-        productPhotoSO.addDesc("document_type") ;
+        productPhotoSO.addAsc("document_type") ;
         productPhotoSO.addAsc("order_") ;
     	ArrayPageList<ProductPhoto> productPhotos = this.query(productPhotoSO) ;
     	
@@ -97,6 +101,8 @@ public class ProductPhotoBO extends BaseServiceImpl {
         product.setOperate(Product.OPERATE_UPDATE_UNVERSION);
         
         jdbcDao.update(product) ;
+        
+        return result;
     }
     
     public ProductPhoto getDownloadProductPhoto(Long id) {
@@ -106,19 +112,21 @@ public class ProductPhotoBO extends BaseServiceImpl {
     	return  productPhoto;
     }
     
-    public void makeItAsCover(Long id){
+    public ProductPhoto makeItAsCover(Long id){
 
     	ProductPhoto productPhoto = this.get(id) ;
-    	productPhoto.setDocument_type("P") ;
+    	productPhoto.setDocument_type("m") ;
     	productPhoto.addInclusions("document_type") ;
     	
         jdbcDao.update(productPhoto) ;
         
         jdbcDao.execute(
-        		"update biz_product_photo set document_type='p' where document_type='P' and id<>?", 
+        		"update biz_product_photo set document_type='p' where document_type='m' and id<>?", 
         		new Object[]{id}) ;
         
-        this.updateProductMainUUID(productPhoto.getProduct_id());
+        productPhoto.setProduct_uuids(this.updateProductMainUUID(productPhoto.getProduct_id()));
+        
+        return productPhoto;
     }
     
     public void update(ProductPhoto productPhoto) {
@@ -144,7 +152,27 @@ public class ProductPhotoBO extends BaseServiceImpl {
     		tFile.delete() ;
     	}
     }
+    
+    public void deleteByProductId(Long product_id) {
+    	/*
+        jdbcDao.execute(
+        		"delete from biz_product_photo where product_id<>?", 
+        		new Object[]{product_id}) ;
+        		*/
+        ProductPhoto productPhoto = new ProductPhoto() ;
+        productPhoto.setProduct_id(product_id);
+    	jdbcDao.delete(ProductPhoto.class, productPhoto) ;
+    	    	
+    	String destBase = CodeHelper.getWebConfig("realPath") + "/photo/" + this.getFolderName(product_id) + "/" ;
 
+    	try {
+			FileUtils.deleteDirectory(new File(destBase)) ;
+		} catch (IOException e) {
+    		log.error("Delete Directory", e) ;
+    		throw new BusinessException(20009L) ;//文件不能写入，请重新上传！
+		}
+    	//new File(destBase).delete() ; 
+    }
     
     public ArrayPageList<ProductPhoto> query(ProductPhotoSO productPhotoSO) {
 

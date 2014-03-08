@@ -101,14 +101,15 @@ boolean isDocumentView = "document".equals(type) ;
                 <li>
                     <span href="#">产品管理</span>
                     <div>
-                        <a href="javascript:openView(12, '/biz/productCategory_view.action', '产品管理')" tabindex="-1">产品目录管理</a>
-                        <a href="javascript:openView(13, '/biz/product_view.action', '产品管理')" tabindex="-1">产品管理</a>
+                        <a href="javascript:removeAll();openView(21, '/system/dict_view.action', '品牌管理', {domain_:'Brand'})" tabindex="-1">品牌管理</a>
+                        <a href="javascript:removeAll();openView(12, '/biz/productCategory_view.action', '产品管理')" tabindex="-1">产品目录管理</a>
+                        <a href="javascript:removeAll();openView(13, '/biz/product_view.action', '产品管理')" tabindex="-1">产品管理</a>
                     </div>
                 </li>
+                <!-- 
                 <li>
                     <span href="#">基础数据配置</span>
                     <div id="navBaseConfig">
-                        <!--<a href="javascript:openView(21, '/system/dict_view.action', '常用参数管理')" tabindex="-1">常用参数管理</a>-->
                         <a href="javascript:removeAll();openView(301, '/system/config_view.action', '货物类型', {sub_id:16})" tabindex="-1">货物类型</a>
                         <a href="javascript:removeAll();openView(302, '/system/config_view.action', '货物单位', {sub_id:13})" tabindex="-1">货物单位</a>
                         <a href="javascript:removeAll();openView(303, '/system/config_view.action', '堆场', {sub_id:15})" tabindex="-1">堆场</a>
@@ -137,7 +138,7 @@ boolean isDocumentView = "document".equals(type) ;
                     <div>
                         <a href="javascript:removeAll();openView(200001, '/system/dict_edit.action?domain_=CM.currency.rate', '汇率')" tabindex="-1">汇率</a>
                     </div>
-                </li>
+                </li> -->
                 <li>
                     <span href="#">用户管理</span>
                     <div>
@@ -151,9 +152,11 @@ boolean isDocumentView = "document".equals(type) ;
                     <div>
                         <a href="javascript:removeAll();openView(100001, '/system/eventLog_view.action', '日志查询')" tabindex="-1">日志查询</a>
                         <a href="javascript:removeAll();openView(100002, '/system/dict_reloadView.action', '缓存刷新')" tabindex="-1">缓存刷新</a>
+                        <!-- 
                         <a href="javascript:removeAll();openView(100004, '/system/config_view.action', '快速链接1', {sub_id:361})" tabindex="-1">快速链接1</a>
                         <a href="javascript:removeAll();openView(100005, '/system/config_view.action', '快速链接2', {sub_id:362})" tabindex="-1">快速链接2</a>
                         <a href="javascript:removeAll();openView(100006, '/system/config_view.action', '快速链接3', {sub_id:363})" tabindex="-1">快速链接3</a>
+                         -->
                     </div>
                 </li>
                 <%} else if (isReportView){%>

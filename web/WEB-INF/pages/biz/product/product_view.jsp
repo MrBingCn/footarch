@@ -19,14 +19,27 @@ var g$v<%=view_id%> = $.extend(newView(), {
     init:function (){
         //this.initSelect() ;
         this.pageIndex = E("productSO.pageIndex") ;
+
+        var proCategory = filter(g$dict.ProProductCategory, {record_status:'A'});
+        var category = filter(g$dict.ProductCategory, {record_status:'A'});
+        var categoryOptions = [] ;
+        
+        for (var i = 0 ; i < proCategory.length ; i ++) {
+        	categoryOptions[categoryOptions.length] = proCategory[i] ;
+        	for (var j = 0 ; j < category.length ; j ++) {
+        		if (category[j].pro_product_category_id == proCategory[i].PK_ID) {
+                     categoryOptions[categoryOptions.length] = {PK_ID:category[j].PK_ID, name_cn:"　　" + category[j].name_cn} ;
+        		}
+        	}
+        }
         
         //E$("product.product_type").on("change", this.typeOnChange) ;
         
         //fillOptions({id:"productSO.type_", dictName:"CRM.product.type_", firstLabel:"全部产品"}) ;
         fillOptions({id:"productSO.record_status", dictName:"CM.status", firstLabel:"全部"}) ;
         fillOptions({id:"product.record_status", dictName:"CM.status", firstLabel:"请选择..."}) ;// 改为字典取值
-        fillOptions({id:"product.product_category_id", dictName:"pos.productCategory", firstLabel:"请选择..."}) ;
-        fillOptions({id:"product.brand_id", dictName:"CM.brand", firstLabel:"请选择..."}) ;
+        fillOptions({id:"product.product_category_id", data:categoryOptions, textProperty:"name_cn", firstLabel:"请选择..."}) ;
+        fillOptions({id:"product.brand_id", dictName:"Brand", firstLabel:"请选择..."}) ;
         //fillOptions({id:"product.invoice_type", dictName:"BIZ.invoice.type", firstLabel:"请选择..."}) ;
 
         this.initDataGrid("productTB", {height:"400px"}) ;
@@ -68,8 +81,10 @@ var g$v<%=view_id%> = $.extend(newView(), {
              viewJs.entity = this.eFormInitData;
              formDeserialize("eForm", this.eFormInitData, {}) ;// reset form;
              //this.refreshCustomerServiceRep() ;
+             $("#phototr", viewJs.view).hide() ;
              return ;
         }
+        $("#phototr", viewJs.view).show() ;
         
         var _this = this;
         
@@ -88,18 +103,6 @@ var g$v<%=view_id%> = $.extend(newView(), {
         );
     },
     
-    showPhotos:function(productId, ids) {
-        uploader.url = "/biz/productPhoto" ;
-    	var idArr = ids.split(",");
-    	var $photoDisplayDiv = E$("photoDisplayDiv") ;
-        $photoDisplayDiv.html("");
-    	for (var i = 0 ; i < idArr.length ; i ++)
-  		{
-    		var ids = idArr[i].split(":");
-    		$photoDisplayDiv.append('<div><img src="' + root + '/photo/' + (productId%100) + '/' + productId + '/' +ids[1] +'"/>&nbsp;&nbsp;<a onclick="uploader.doDelete('+ids[0]+', this);" style="cursor:pointer;color:blue;">删除</a></div>');
-  		}
-    },
-    
     saveNotList:function () {
     	var _this = this ;
     	this.save(function (_data) {
@@ -107,7 +110,8 @@ var g$v<%=view_id%> = $.extend(newView(), {
     		if (V("product.id") == "") {
                 _this.showBlock("e") ;	
                 V("product.id", _data.id);
-                //$("#viewContactBtn, #viewPartyBtn", viewJs.view).show() ;
+                $("#phototr", viewJs.view).show() ;
+                E$("photoDisplayDiv").html("");
                 //_this.typeOnChange();
     		} 
     		V("product.version_id", _data.version_id);
@@ -115,8 +119,87 @@ var g$v<%=view_id%> = $.extend(newView(), {
     } ,
     
     photoUpload:function(){
-        uploader.url = "/biz/productPhoto" ;
-    	uploader.show(V("product.id"), 'P', 'photoDisplayDiv');	
+    	load("uploadFormWinDiv", root + "/biz/document/document_uploadForm.action", null, function(responseText, textStatus, XMLHttpRequest) {
+            uploader.url = "/biz/productPhoto" ;
+            uploader.getHtml=function(data) {
+            	data.root = root;
+            	data.isCover = false ;
+                return parse(E$("photoItemTemplate").val(), data);
+            }
+            uploader.show(V("product.id"), 'p', 'photoDisplayDiv'); 
+    	});
+    },
+    
+    showPhotos:function(productId, ids) {
+        
+        var $photoDisplayDiv = E$("photoDisplayDiv") ;
+        $photoDisplayDiv.html("");
+        
+        if (ids == null || ids == ""){
+            return ;
+        }
+        
+        //uploader.url = "/biz/productPhoto" ;
+        var idArr = ids.split(",");
+        for (var i = 0 ; i < idArr.length ; i ++)
+        {
+            var ids = idArr[i].split(":");
+            //$photoDisplayDiv.append('<div><img src="' + root + '/photo/' + (productId%100) + '/' + productId + '/' +ids[1] +'.t"/>&nbsp;&nbsp;<a onclick="uploader.doDelete('+ids[0]+', this);" style="cursor:pointer;color:blue;">删除</a></div>');
+            var data = {root:root, product_id:productId, id:ids[0], file_uuid:ids[1], isCover:(i == 0)};
+            $photoDisplayDiv.append(parse(E$("photoItemTemplate").val(), data));
+        }
+    },
+
+    
+    doPhotoDelete:function (id, linkObj) {
+        
+        if (!window.confirm("是否确定要删除？")) {
+            return ;
+        }
+    
+        var _this = this ;
+        
+        ajax(
+            root + "/biz/productPhoto_delete.action", 
+            "document.id="+id,//$("#documentTB input:checked")[0].value,
+            function(data, textStatus){
+                //alert(data.message) ;
+                if (data.code == "0") {
+                    //list() ;
+                    $(linkObj).parent().parent().remove() ;
+                	//_this.showPhotos(data.product_id, data.file_uuid) ;
+                } else {
+                	alert(data.message) ;
+                }
+            }, 
+            false
+        );
+    },
+    
+    doMakeItAsCover:function (id, linkObj) {
+        
+        if (!window.confirm("是否确定设置为封面？")) {
+            return ;
+        }
+    
+        var _this = this ;
+   
+        ajax(
+            root + "/biz/productPhoto_makeItAsCover.action", 
+            "id="+id,//$("#documentTB input:checked")[0].value,
+            function(data, textStatus){
+                //alert(data.message) ;
+                if (data.code == "0") {
+                    //list() ;
+                    //alert(data.product_uuids);
+                    var pPhoto = data.data ;
+                    _this.showPhotos(pPhoto.product_id, pPhoto.product_uuids) ;
+                } else {
+                    alert(data.message) ;
+                }
+            }, 
+            false
+        );
     }
 }) ;
 
@@ -164,11 +247,12 @@ var g$v<%=view_id%> = $.extend(newView(), {
         <thead>
           <tr>
             <th width="4%"></th>
-            <th width="30%">中文名称</th>
-            <th width="30%">英文名称</th>
-            <th width="10%">货号</th>
-            <th width="12%">所属品牌</th>
-            <th width="12%">状态</th>
+            <th width="27%">中文名称</th>
+            <th width="27%">英文名称</th>
+            <th width="12%">货号</th>
+            <th width="10%">分类</th>
+            <th width="10%">所属品牌</th>
+            <th width="10%">状态</th>
           </tr>
         </thead>
         
@@ -186,8 +270,9 @@ var g$v<%=view_id%> = $.extend(newView(), {
 		            <td>{$T.name_cn}</td>
 		            <td>{$T.name_en}</td>
 		            <td>{$T.code_}</td>
-		            <td>{$T.brand_id}</td>
-		            <td>{$T.record_status}</td>
+                    <td>{dVal("ProductCategory", "name_cn", {PK_ID:$T.product_category_id})}</td>
+                    <td>{dVal("Brand", "name_", {PK_ID:$T.brand_id})}</td>
+		            <td>{dVal("CM.status", "name_", {PK_ID:$T.record_status})}</td>
 	            </tr>
               </textarea>
             </td>
@@ -216,8 +301,20 @@ var g$v<%=view_id%> = $.extend(newView(), {
                 <td width="30%"><input type="text" name="product.name_en" maxlength="250"/></td>
               </tr>
               <tr>
+                <td class="label">分类：</td>
+                <td>
+                  <select name="product.product_category_id" id="product.product_category_id" required="required">
+                  </select>
+                </td>
+                <td class="label">品牌：</td>
+                <td>
+                  <select name="product.brand_id" id="product.brand_id">
+                  </select>
+                </td>
+              </tr>
+              <tr>
                 <td class="label">货号：</td>
-                <td><input type="text" name="product.name_short"  maxlength="50"/></td>
+                <td><input type="text" name="product.code_"  maxlength="50" required="required"/></td>
                 <td class="label">关键字：</td>
                 <td><input type="text" name="product.keywords_"  maxlength="50"/></td>
               </tr>
@@ -233,7 +330,7 @@ var g$v<%=view_id%> = $.extend(newView(), {
                 <td class="label">本店售价：</td>
                 <td><input type="number" name="product.selling_price" maxlength="10"/></td>
               </tr>
-              <tr>
+              <tr style="display: none;">
                 <td class="label">促销价格：</td>
                 <td><input type="number" name="product.promote_price" maxlength="10"/></td>
                 <td class="label">促销日期：</td>
@@ -241,6 +338,12 @@ var g$v<%=view_id%> = $.extend(newView(), {
                   <input type="text" name="product.promote_start_on" id="product.promote_start_on" maxlength="10" style="width: 80px;"/>
                   -
                   <input type="text" name="product.promote_end_on" id="product.promote_end_on" maxlength="10" style="width: 80px;"/>
+                </td>
+              </tr>
+              <tr>
+                <td class="label">描述：</td>
+                <td>
+                  <textarea style="height: 60px;"></textarea>
                 </td>
               </tr>
               <tr>
@@ -253,17 +356,35 @@ var g$v<%=view_id%> = $.extend(newView(), {
                 <td>
                 </td>
               </tr>
-              <tr>
+              <tr id="phototr">
                 <td class="label">图片：</td>
-                <td>
+                <td colspan="3">
+                  <style>
+                  #photoDisplayDiv .documentItemDiv {
+                    display: inline-block;
+                    margin: 5px;
+                  }
+                  #photoDisplayDiv img {
+                    width: 100px;
+                    height: 100px;
+                  }
+				  </style>
+				  
+				  <textarea rows="1" cols="1" style="display: none;" id="photoItemTemplate">
+				    <div class="documentItemDiv">
+				      <div {#if $T.isCover}style="border: 3px solid #CCFF00"{#/if}>
+                        <img src="{$T.root}/photo/{$T.product_id%100}/{$T.product_id}/{$T.file_uuid}.t"/>
+				      </div>
+				      <div style="text-align: right;">
+				        {#if !$T.isCover}
+				        <a onclick="viewJs.doMakeItAsCover({$T.id}, this);" style="cursor:pointer;color:blue;">设为封面</a>
+				        {#/if}
+                        <a onclick="viewJs.doPhotoDelete({$T.id}, this);" style="cursor:pointer;color:blue;">删除</a>
+				      </div>
+				    </div>
+				  </textarea>
                   <button type="button" onclick="viewJs.photoUpload();">上传</button>
-                </td>
-                <td class="label"></td>
-                <td>
-                </td>
-              </tr>
-              <tr>
-                <td colspan="4">
+                  <br/>
                   <div id="photoDisplayDiv"></div>
                 </td>
               </tr>
@@ -301,4 +422,3 @@ var g$v<%=view_id%> = $.extend(newView(), {
    -->
 </div>
 
-    <%@include file="/WEB-INF/pages/biz/document/upload_form.jsp" %>

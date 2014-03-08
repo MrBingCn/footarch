@@ -21,7 +21,7 @@ public class Product extends BaseEntity {
 	private Long id;
 
     private Long product_category_id  ;
-    private Long brand_id  ;
+    private String brand_id  ;
     private String code_                ;
     private String name_cn              ;
     private String name_en              ;
@@ -81,10 +81,10 @@ public class Product extends BaseEntity {
 	public void setProduct_category_id(Long product_category_id) {
 		this.product_category_id = product_category_id;
 	}
-	public Long getBrand_id() {
+	public String getBrand_id() {
 		return brand_id;
 	}
-	public void setBrand_id(Long brand_id) {
+	public void setBrand_id(String brand_id) {
 		this.brand_id = brand_id;
 	}
 	public String getShort_desc() {

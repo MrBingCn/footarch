@@ -167,7 +167,7 @@ create table biz_product_category  (
 create table biz_product  (
     id                 bigint(12)   not null AUTO_INCREMENT,
     product_category_id bigint(12)  comment '商品所属商品分类id，取值 ecs_category的cat_id ',
-    brand_id bigint(12)  comment '品牌id，取值于ecs_brand 的 brand_id ',
+    brand_id varchar(50)  comment '品牌id，取值于ecs_brand 的 brand_id ',
     
     code_ varchar(50)  comment '商品的唯一货号 ',
     name_cn varchar(250)  comment '商品的CN名称 ',

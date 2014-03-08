@@ -2,7 +2,9 @@
 
 <%
 String view_id=request.getParameter("view_id");
+String domain=request.getParameter("domain_");
 %>
+
 
 <script>
 
@@ -17,14 +19,16 @@ var g$v<%=view_id%> = $.extend(newView(), {
     entityName:"dict",
     
     init:function (){
-        this.initSelect() ;
+        //this.initSelect() ;
         this.pageIndex = E("dictSO.pageIndex") ;
         
         fillOptions({id:"dict.status_", dictName:"CM.status", firstLabel:"请选择..."}) ;// 改为字典取值
         fillOptions({id:"dictSO.status_", dictName:"CM.status", firstLabel:"全部"}) ;
         
+        <%if(domain == null){%>
         fillOptions({id:"dict.domain_", dictName:"sys.dict.configable_list"}) ;
         fillOptions({id:"dictSO.domain_", dictName:"sys.dict.configable_list"}) ;
+        <%}%>
         
         this.initDataGrid("dictTB", {height:"400px"}) ;
         
@@ -39,6 +43,14 @@ var g$v<%=view_id%> = $.extend(newView(), {
         		}]
         } ;
     }
+    
+    <%if(domain != null){%>
+    ,checkEditForm:function(_form) {
+    	alert(E$("dict.domain_").val());
+    	E$("dict.domain_").val("<%=domain%>");
+        return true ;
+    }
+    <%} %>
 }) ;
 
 
@@ -53,13 +65,19 @@ var g$v<%=view_id%> = $.extend(newView(), {
       <form method="post" id="sForm" name="sForm" onsubmit="return false;" style="margin: 0">
         <input name="dictSO.pageIndex" id="dictSO.pageIndex" value="1" type="hidden" />
         <input name="dictSO.pageSize" id="dictSO.pageSize" value="10" type="hidden" />
+        <%if(domain != null){%>
+        <input type="hidden" name="dictSO.domain_eq" value="<%=domain%>"/>
+        <%} %>
+        
         <table width="100%"  style="border: 0; padding: 0;" cellspacing="0" cellpadding="0" class="formgrid">
           <tr>
+           <%if(domain == null){%>
            <td width="6%" class="label">常用参数：</td>
            <td width="15%">
              <select name="dictSO.domain_" id="dictSO.domain_" onchange="setSelectValue(E('dict.domain_'), [this.value])">
              </select>
            </td>
+           <%} %>
            <td width="6%" class="label">编码：</td>
            <td width="15%">
              <input name="dictSO.code_" value="" type="text" />
@@ -117,6 +135,9 @@ var g$v<%=view_id%> = $.extend(newView(), {
     <form method="post" id="eForm" name="eForm" onsubmit="return false;" style="margin: 0">
       <input type="hidden" name="dict.id" id="dict.id"/>
       <input type="hidden" name="dict.version_id" id="dict.version_id"/>
+      <%if(domain != null){%>
+      <input type="hidden" name="dict.domain_" id="dict.domain_" value="<%=domain%>"/>
+      <%} %>
   
       <table cellspacing="0" cellpadding="0" width="100%" class="layoutgrid">
         <tr valign="top">
@@ -124,6 +145,7 @@ var g$v<%=view_id%> = $.extend(newView(), {
           </td>
           <td width="45%">
             <table cellspacing="0" cellpadding="0" width="100%" class="formgrid">
+              <%if(domain == null){%>
               <tr>
                 <td class="label">常用参数：</td>
                 <td>
@@ -131,6 +153,7 @@ var g$v<%=view_id%> = $.extend(newView(), {
 	             </select>
                 </td>
               </tr>
+              <%} %>
               <tr>
                 <td width="25%" class="label">编码：</td>
                 <td><input type="text" name="dict.code_" required="required" maxlength="50"/></td>

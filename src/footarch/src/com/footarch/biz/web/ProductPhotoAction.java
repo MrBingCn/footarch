@@ -183,7 +183,7 @@ public class ProductPhotoAction extends BaseAction implements Preparable {
     @Pid(value=1071)
     public String makeItAsCover()  throws Exception {
     	
-        productPhotoBO.makeItAsCover(this.id) ;
+    	document = productPhotoBO.makeItAsCover(this.id) ;
         
         renderObject(document, ResponseMessage.KEY_UPDATE_OK) ;
         

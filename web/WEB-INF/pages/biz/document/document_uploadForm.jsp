@@ -95,7 +95,7 @@ var uploader_parent = {
 </script>
 
 
-<script type="text/javascript" src="<%=root%>/script/biz/document/upload_form.js"></script>
+<script type="text/javascript" src="<%=root%>/script/biz/document/document_uploadForm.js"></script>
 
 <div id="uploadFormDiv" style="display:none;">
 
