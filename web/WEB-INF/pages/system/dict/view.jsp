@@ -45,8 +45,7 @@ var g$v<%=view_id%> = $.extend(newView(), {
     }
     
     <%if(domain != null){%>
-    ,checkEditForm:function(_form) {
-    	alert(E$("dict.domain_").val());
+    ,checkEditForm:function(_form) {    	
     	E$("dict.domain_").val("<%=domain%>");
         return true ;
     }

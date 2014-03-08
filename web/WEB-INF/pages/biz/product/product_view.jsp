@@ -364,21 +364,33 @@ var g$v<%=view_id%> = $.extend(newView(), {
                     display: inline-block;
                     margin: 5px;
                   }
-                  #photoDisplayDiv img {
-                    width: 100px;
+                  #photoDisplayDiv .photoImgDiv {
                     height: 100px;
+                    width: 100px;
+                    padding:2px;
+                    margin:2px;
+                    text-align: center;
+                    vertical-align: middle;
+                    background-color: #fff;
+                    display: table-cell;
+                    border: 1px solid #0099FF;
+                  }
+                  #photoDisplayDiv img {
+                    max-height: 100px;
+                    max-width: 100px;
                   }
 				  </style>
 				  
 				  <textarea rows="1" cols="1" style="display: none;" id="photoItemTemplate">
 				    <div class="documentItemDiv">
-				      <div {#if $T.isCover}style="border: 3px solid #CCFF00"{#/if}>
+				      <div {#if $T.isCover}style="border: 2px solid #0099FF"{#/if} class="photoImgDiv" >
                         <img src="{$T.root}/photo/{$T.product_id%100}/{$T.product_id}/{$T.file_uuid}.t"/>
 				      </div>
 				      <div style="text-align: right;">
 				        {#if !$T.isCover}
 				        <a onclick="viewJs.doMakeItAsCover({$T.id}, this);" style="cursor:pointer;color:blue;">设为封面</a>
 				        {#/if}
+				        &nbsp;
                         <a onclick="viewJs.doPhotoDelete({$T.id}, this);" style="cursor:pointer;color:blue;">删除</a>
 				      </div>
 				    </div>
