@@ -113,8 +113,11 @@ var g$v<%=view_id%> = $.extend(newView(), {
                 $("#phototr", viewJs.view).show() ;
                 E$("photoDisplayDiv").html("");
                 //_this.typeOnChange();
-    		} 
-    		V("product.version_id", _data.version_id);
+                V("product.version_id", _data.version_id);
+    		} else {
+                viewJs.toPage('s') ;
+                viewJs.list() ;
+    		}
     	});
     } ,
     
@@ -123,7 +126,7 @@ var g$v<%=view_id%> = $.extend(newView(), {
             uploader.url = "/biz/productPhoto" ;
             uploader.getHtml=function(data) {
             	data.root = root;
-            	data.isCover = false ;
+            	data.isCover = (E$("photoDisplayDiv").html() == "") ;
                 return parse(E$("photoItemTemplate").val(), data);
             }
             uploader.show(V("product.id"), 'p', 'photoDisplayDiv'); 

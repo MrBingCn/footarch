@@ -21,7 +21,7 @@ public class ProductBO extends BaseServiceImpl {
     }
     
     public void update(Product product) {  
-    	product.addExclusions("record_status") ;
+    	product.addExclusions("main_photo_uuid") ;
         jdbcDao.update(product) ;  
     }
     
