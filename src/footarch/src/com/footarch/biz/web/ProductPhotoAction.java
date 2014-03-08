@@ -179,7 +179,18 @@ public class ProductPhotoAction extends BaseAction implements Preparable {
         return null;    
         
     }
-
+    
+    @Pid(value=1071)
+    public String makeItAsCover()  throws Exception {
+    	
+        productPhotoBO.makeItAsCover(this.id) ;
+        
+        renderObject(document, ResponseMessage.KEY_UPDATE_OK) ;
+        
+        return null;    
+        
+    }
+    
     //@Pid(value=134)
     @Pid(value=1071)
     public String delete()  throws Exception {

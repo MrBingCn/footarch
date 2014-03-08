@@ -83,17 +83,20 @@ var g$v<%=view_id%> = $.extend(newView(), {
                 viewJs.entity = data;
                 formDeserialize("eForm", data, {}) ;
                 //viewJs.refreshCustomerServiceRep() ;
-                _this.showPhotos(data.id, data.main_photo_uuid)
+                _this.showPhotos(data.id, data.main_photo_uuid);
             }
         );
     },
     
     showPhotos:function(productId, ids) {
+        uploader.url = "/biz/productPhoto" ;
     	var idArr = ids.split(",");
     	var $photoDisplayDiv = E$("photoDisplayDiv") ;
+        $photoDisplayDiv.html("");
     	for (var i = 0 ; i < idArr.length ; i ++)
   		{
-    		$photoDisplayDiv.append('<img src="' + root + '/photo/' + (productId%100) + '/' + productId + '/' +idArr[i] +'"/>');
+    		var ids = idArr[i].split(":");
+    		$photoDisplayDiv.append('<div><img src="' + root + '/photo/' + (productId%100) + '/' + productId + '/' +ids[1] +'"/>&nbsp;&nbsp;<a onclick="uploader.doDelete('+ids[0]+', this);" style="cursor:pointer;color:blue;">删除</a></div>');
   		}
     },
     
@@ -112,7 +115,7 @@ var g$v<%=view_id%> = $.extend(newView(), {
     } ,
     
     photoUpload:function(){
-    	uploader.url = "/biz/productPhoto" ;
+        uploader.url = "/biz/productPhoto" ;
     	uploader.show(V("product.id"), 'P', 'photoDisplayDiv');	
     }
 }) ;

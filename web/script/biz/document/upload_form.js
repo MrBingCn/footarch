@@ -20,7 +20,7 @@ var uploader = $.extend(uploader_parent, {
 		this.$form.validator();
 		
 	    $("#document\\.biz_id", this.$form).val(biz_id) ;
-	    alert($("#document\\.biz_id").val());
+
 	    $("document\\.document_type", this.$form).val(document_type) ;
 	    
 	    this.documentsDiv = E(documentsDivId) ;
