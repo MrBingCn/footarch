@@ -31,6 +31,26 @@ var g$v<%=view_id%> = $.extend(newView(), {
         E$("sForm").validator();
         E$("eForm").validator();
         
+        var organizationOptions = filter(g$dict.Organization, {record_status:'A'});
+        
+        E$("userSO.organization_id").combobox2({id:"userSO.organization_id", 
+            data:organizationOptions, 
+            firstLabel:"全部", 
+            valueProperty:"PK_ID", 
+            idProperty:"PK_ID", 
+            textProperty:["name_"], 
+            titleProperty:"name_"
+        });
+
+        E$("user.organization_id").combobox2({id:"user.organization_id", 
+            data:organizationOptions, 
+            firstLabel:"请选择...", 
+            valueProperty:"PK_ID", 
+            idProperty:"PK_ID", 
+            textProperty:["name_"], 
+            titleProperty:"name_"
+        });
+        /*
         var companyOptions = [];//filter(g$dict.Company, {record_status:'A'});
 
         E$("userSO.company_id").combobox2({id:"userSO.company_id", 
@@ -75,7 +95,7 @@ var g$v<%=view_id%> = $.extend(newView(), {
                     valueProperty:"id"
                 }) ;
             }
-        };
+        };*/
         
         this.first();
     },
@@ -173,9 +193,15 @@ var g$v<%=view_id%> = $.extend(newView(), {
            <td style="width:100px;">
              <input name="userSO.login_id_like" value="" type="text" style="text-transform: uppercase;" />
            </td>
+           <!-- 
            <td style="width:80px;" class="label">所属公司：</td>
            <td style="width:160px;">
              <input name="userSO.company_id" id="userSO.company_id" value="" type="text" />
+           </td>
+            -->
+           <td style="width:80px;" class="label">所属部门：</td>
+           <td style="width:160px;">
+             <input name="userSO.organization_id" id="userSO.organization_id" value="" type="text" />
            </td>
            <td style="width:100px;">
              <button onclick="viewJs.first();" accesskey="Q" >查找(Q)</button>
@@ -248,24 +274,22 @@ var g$v<%=view_id%> = $.extend(newView(), {
                 <td width="20%" class="label">密码确认：</td>
                 <td><input type="password" name="user.password_confirm" maxlength="16"/></td>
               </tr>
+              <!--
               <tr>
                 <td class="label">所属公司：</td>
                 <td colspan="3">
                   <input name="user.company_id" id="user.company_id" required="required"/>
-                  <!-- 
-                  <select name="user.company_id" id="user.company_id"  required="required">
-                  </select>
-                   -->
                 </td>
-              </tr>
+              </tr> 
+               -->
               <tr id="organizationTr">
                 <td class="label">所属部门：</td>
                 <td colspan="3">
+                  <input type="text" name="user.organization_id" id="user.organization_id" />
                   <!-- 
-                  <input type="text" name="user.organization_id"/>
-                   -->
                   <select name="user.organization_id" id="user.organization_id" >
                   </select>
+                   -->
                 </td>
               </tr>
               <tr>
