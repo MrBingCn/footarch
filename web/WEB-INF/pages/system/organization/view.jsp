@@ -35,18 +35,19 @@ var g$v<%=view_id%> = $.extend(newView(), {
             valueProperty:"id"
         }) ;
 
+        var organizationOptions = filter(g$dict.Organization, {record_status:'A', level_:[0,1,2,3]});
         E$("organization.pro_organization_id").combobox2({
-            data:[], 
+            data:organizationOptions, 
             firstLabel:"[无上级级织]", 
-            valueProperty:"id", 
-            idProperty:"id", 
+            valueProperty:"PK_ID", 
+            idProperty:"PK_ID", 
             textProperty:["name_"]
         });
         E("organization.pro_organization_id").onSelected = function (event, elem) {
             if (elem !=null) {
                 var level = elem.level_ ;
                 if (typeof(level) == "undefined" || level == null) {
-                    level = 1 ;
+                    level = 0 ;
                 } else {
                     level ++ ;
                 }
@@ -132,7 +133,7 @@ var g$v<%=view_id%> = $.extend(newView(), {
     	var $tr = $elem.parent().parent() ;
     	
     	if (typeof(level_) == "undefined") {
-    		level_ = "1";	
+    		level_ = "0";	
             V("organizationSO.pro_organization_id", "");    
     		$("#organizationTB #listBody", this.view).html("") ;
     	} 
@@ -221,7 +222,7 @@ var g$v<%=view_id%> = $.extend(newView(), {
     }, 
     
     onList:function (_data) {
-    	E$("organization.pro_organization_id").combobox2("option", "data", _data.list);
+    	//E$("organization.pro_organization_id").combobox2("option", "data", _data.list);
     },
     
     onSearchTypeChange:function(type) {
