@@ -458,13 +458,13 @@ public class UserBO extends BaseServiceImpl {
         	role_codes.add(role.getCode_()) ;
         }
         
-        
+        /*
         if (userResult.getCompany_id().longValue() == 1l) {
         	sessionUser.setComany_type(new Integer(0));
         }
         else {
 
-        }
+        }*/
         
 
         //sessionUser.setMarks(this.getMarkItBO().queryByUserId(userResult.getId())) ;
