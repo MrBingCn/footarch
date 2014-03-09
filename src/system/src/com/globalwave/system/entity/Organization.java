@@ -29,6 +29,9 @@ public class Organization extends BaseEntity {
     
     private Integer level_ ;
     private Integer order_ ;
+
+    private Double ar_rate ;
+    private Double commission_rate ;
     
     private String record_status ;
     
@@ -116,6 +119,18 @@ public class Organization extends BaseEntity {
 	}
 	public void setOrder_(Integer order_) {
 		this.order_ = order_;
+	}
+	public Double getAr_rate() {
+		return ar_rate;
+	}
+	public void setAr_rate(Double ar_rate) {
+		this.ar_rate = ar_rate;
+	}
+	public Double getCommission_rate() {
+		return commission_rate;
+	}
+	public void setCommission_rate(Double commission_rate) {
+		this.commission_rate = commission_rate;
 	}
 	
 	

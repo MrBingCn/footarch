@@ -46,7 +46,7 @@ create table biz_order  (
    adjustment_manual decimal(12,2) default 0.00 not null comment '手工调整金额',
    total             decimal(12,2) default 0.00 not null comment '整单付款总金额',
    
-   order_agent_level int comment '下订单的代理等级，1:省级代理，2:市级代理，3:区级代理，4:终端代理，5:预留代理',
+   order_agent_level int comment '下订单的代理等级，0:台湾工厂，1:省级代理，2:市级代理，3:区级代理，4:终端代理，5:预留代理',
    
    ar_amount_0       decimal(12,2) default 0.00 not null comment '零级代理/台湾工厂的 应收金额',
    

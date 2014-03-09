@@ -108,6 +108,12 @@ values('22001', '根据查询条件，未能获取报表数据！' );
 
 INSERT INTO `cfg_message` (`ID`, `CODE_`, `VALUE_`) VALUES ('40101', '40101', '父目录不存在，本操作无效！');
 INSERT INTO `cfg_message` (`ID`, `CODE_`, `VALUE_`) VALUES ('40102', '40102', '子目录存在，本操作无效！');
+INSERT INTO `cfg_message` (`ID`, `CODE_`, `VALUE_`) VALUES ('1061', '1061', '本门店利润未达到保护利润（{0}%）！');
+INSERT INTO `cfg_message` (`ID`, `CODE_`, `VALUE_`) VALUES ('1062', '1062', '下级门店利润未达到保护利润（{0}%）！');
+INSERT INTO `cfg_message` (`ID`, `CODE_`, `VALUE_`) VALUES ('1051', '1051', '父组织不存在，本操作无效！');
+INSERT INTO `cfg_message` (`ID`, `CODE_`, `VALUE_`) VALUES ('1052', '1052', '子组织存在，本操作无效！');
+INSERT INTO `cfg_message` (`ID`, `CODE_`, `VALUE_`) VALUES ('1053', '1053', '父组织与子组织不该一样的标识！');
+INSERT INTO `cfg_message` (`ID`, `CODE_`, `VALUE_`) VALUES ('1054', '1054', '父子关系包含死循环，请重新选择父组织！');
 
 
 

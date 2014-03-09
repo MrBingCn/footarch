@@ -36,3 +36,7 @@ insert into cfg_dict (id, pro_dict_id, domain_, code_, name_, desc_, flag_, stat
 insert into cfg_dict (id, pro_dict_id, domain_, code_, name_, desc_, flag_, status_, order_, ext_s1, ext_s2, ext_s3, ext_s4, ext_s5) values (-16, 0, 'CM.status_', '1', '激活-可用', '', null, 'A', 1, null, null, null, null, null);
 insert into cfg_dict (id, pro_dict_id, domain_, code_, name_, desc_, flag_, status_, order_, ext_s1, ext_s2, ext_s3, ext_s4, ext_s5) values (-14, 0, 'CM.status', 'C', '取消-不可用', '', null, 'A', 2, null, null, null, null, null);
 insert into cfg_dict (id, pro_dict_id, domain_, code_, name_, desc_, flag_, status_, order_, ext_s1, ext_s2, ext_s3, ext_s4, ext_s5) values (-13, 0, 'CM.status', 'A', '激活-可用', '', null, 'A', 1, null, null, null, null, null);
+
+
+
+insert into cfg_dict (id, pro_dict_id, domain_, code_, name_, desc_, flag_, status_, order_, ext_s1, ext_s2, ext_s3, ext_s4, ext_s5) values (-101, 0, 'CM.protectProfits', 'Global', '8', '全局保护利润', null, 'A', 1, null, null, null, null, null);

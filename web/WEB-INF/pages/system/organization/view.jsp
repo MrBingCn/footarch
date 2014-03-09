@@ -17,6 +17,7 @@ var g$v<%=view_id%> = $.extend(newView(), {
     entityName:"organization",
     entity:null,
     proIdName:"pro_organization_id",
+    searchType:"H",
     
     init:function (){
         //this.initSelect() ;
@@ -52,17 +53,10 @@ var g$v<%=view_id%> = $.extend(newView(), {
                 V("organization.level_", level) ;
             }
         };
-        var hltCompanyOptions = filter(g$dict.Company, {company_type:0,record_status:'A'}) ;
+        
         /*
-        var hltCompanyOptions = <%=request.getAttribute("hltCompanyOptions")%>;
-        fillOptions({id:"organization.company_id", 
-            data:hltCompanyOptions, 
-            firstLabel:"请选择...", 
-            textProperty:"name_cn", 
-            titleProperty:"name_cn", 
-            valueProperty:"id"
-        }) ;
-        */
+        var hltCompanyOptions = filter(g$dict.Company, {company_type:0,record_status:'A'}) ;
+
         E$("organizationSO.company_id").combobox2({
             firstLabel:"Choose",
             data:hltCompanyOptions, 
@@ -90,15 +84,6 @@ var g$v<%=view_id%> = $.extend(newView(), {
             	alert("请重新选择公司！") ;
             }
         };
-        
-        /*
-        fillOptions({id:"organizationSO.company_id", 
-            data:hltCompanyOptions, 
-            firstLabel:"全部", 
-            textProperty:"name_cn", 
-            titleProperty:"name_cn", 
-            valueProperty:"id"
-        }) ;
         */
         this.initDataGrid("organizationTB", {height:"400px"}) ;
         
@@ -108,6 +93,7 @@ var g$v<%=view_id%> = $.extend(newView(), {
         
         this.toPage('s') ;
         
+        /*
         this.convertors = {
         		record_status_name:["record_status",function (_v) {
         			return dVal("CM.status", "name_", {PK_ID:_v});
@@ -116,16 +102,99 @@ var g$v<%=view_id%> = $.extend(newView(), {
                     return find(hltCompanyOptions, "name_cn", {id:_v});
                 }]
         } ;
-
+        */
         //this.first();
+
 	    var orgListFunc = this.list; //record the original
 	    this.list = function(){
-	    	if (E$("organizationSO.company_id").val() == "") {
-	    		alert("请选择公司后查询！") ;
-	    		return ;
+	    	if (_this.searchType == 'C') {
+                V("organizationSO.level_", "");
+                V("organizationSO.pro_organization_id", "");
+                
+                _this.proIdName = null;
+                
+	            if (E$("organizationSO.company_id").val() == "") {
+	                alert("请选择公司后查询！") ;
+	                return ;
+	            }
+	            orgListFunc.call(_this) ;
+	    	} else {
+	    		
+	    		_this.proIdName = "pro_organization_id" ;
+	    		
+	    		_this.listTree() ;
 	    	}
-	    	orgListFunc.call(_this) ;
 	    };
+    },
+    
+    listTree:function(event, level_, elem) {
+    	var $elem = $(elem) ;
+    	var $tr = $elem.parent().parent() ;
+    	
+    	if (typeof(level_) == "undefined") {
+    		level_ = "1";	
+            V("organizationSO.pro_organization_id", "");    
+    		$("#organizationTB #listBody", this.view).html("") ;
+    	} 
+
+    	if($elem.hasClass("ui-icon-plus")) {
+            $elem.removeClass("ui-icon-plus") ;
+            $elem.addClass("ui-icon-minus") ;
+    	} else {
+            $elem.removeClass("ui-icon-minus") ;
+            $elem.addClass("ui-icon-plus") ;
+    	}
+
+        if (typeof(event) != "undefined") {
+            event.stopPropagation();
+        }
+
+    	if ($elem.attr("isLoaded")) {
+    		this.displayRow($tr, !$elem.hasClass("ui-icon-plus"));
+    		return ;
+    	}
+    	
+    	V("organizationSO.level_", level_);
+    	if($tr != null) {
+            V("organizationSO.pro_organization_id", $tr.attr("id"));
+    	}
+    	
+        if (E("selectMe") != null) {
+            E("selectMe").checked = false ;
+        }
+        
+        ajax(
+            this.list_url, 
+            E$("sForm").serialize(),
+            function(data, textStatus){
+            	viewJs.addRows(viewJs.entityName+"TB", data.list, {deep:level_}) ;
+            	$elem.attr("isLoaded", true);
+            }
+        );
+
+    },
+    
+    displayRow:function($tr, isShow) {
+    	var $next = $tr.next() ;
+    	while ($next != null && $next.is('tr')) {
+
+    		 if($next.attr("proId") == $tr.attr("proId")) {
+    			 break ;
+    		 }
+
+             if($next.attr("level_") <= $tr.attr("level_")) {
+                 break ;
+             }
+    		 
+    		 
+    		 if (isShow) {
+    			 $next.show() ;
+    		 } else {
+    			 $next.hide() ;
+    		 }
+    		 
+             $next = $next.next() ;
+    	}
     },
     
     companyOnChange:function () {
@@ -153,6 +222,15 @@ var g$v<%=view_id%> = $.extend(newView(), {
     
     onList:function (_data) {
     	E$("organization.pro_organization_id").combobox2("option", "data", _data.list);
+    },
+    
+    onSearchTypeChange:function(type) {
+    	this.searchType = type ;
+    	if (type == "H") {
+    		$("#nameLabelTd, #nameInputTd", this.view).hide();
+    	} else {
+    		$("#nameLabelTd, #nameInputTd", this.view).show();
+    	}
     }
 }) ;
 
@@ -168,11 +246,19 @@ var g$v<%=view_id%> = $.extend(newView(), {
       <form method="post" id="sForm" name="sForm" onsubmit="return false;" style="margin: 0">
         <input name="organizationSO.pageIndex" id="organizationSO.pageIndex" value="1" type="hidden" />
         <input name="organizationSO.pageSize" id="organizationSO.pageSize" value="100" type="hidden" />
+        <input name="organizationSO.level_" id="organizationSO.level_" value="" type="hidden" />
+        <input name="organizationSO.pro_organization_id" id="organizationSO.pro_organization_id" value="" type="hidden" />
+        
         <table width="100%"  style="border: 0; padding: 0;" cellspacing="0" cellpadding="0" class="formgrid">
           <tr>
-           <td style="width:80px;" class="label">所属公司：</td>
-           <td style="width:260px;">
-             <input name="organizationSO.company_id" id="organizationSO.company_id" value="" type="text" />
+           <td style="width:80px;" class="label">展示方式：</td>
+           <td style="width:160px;">
+             <label><input type="radio" name="searchType" value='H' onchange="viewJs.onSearchTypeChange('H')" checked="checked"/>层级查询</label>
+             <label><input type="radio" name="searchType" value='C' onchange="viewJs.onSearchTypeChange('C')"/>条件查询</label>
+           </td>
+           <td style="width:60px;display: none;" class="label" id="nameLabelTd">名称：</td>
+           <td style="width:100px;display: none;" id="nameInputTd">
+             <input name="organizationSO.name_" value="" type="text" />
            </td>
            <!-- 
            <td style="width:60px;" class="label">名称：</td>
@@ -185,8 +271,7 @@ var g$v<%=view_id%> = $.extend(newView(), {
            </td>
            <td style="width:80px;" class="label">所属公司：</td>
            <td style="width:120px;">
-             <select name="organizationSO.company_id" id="organizationSO.company_id" >
-             </select>
+             <input name="organizationSO.company_id" id="organizationSO.company_id" value="" type="text" />
            </td>
            <td style="width:60px;" class="label">状态：</td>
            <td style="width:100px;">
@@ -225,17 +310,22 @@ var g$v<%=view_id%> = $.extend(newView(), {
           <tr>
             <td>
               <textarea rows="1" cols="1" id="templateBody" jTemplate="true">
-		          <tr id="{$T.id}" ondblclick="viewJs.toEdit($('#ids', this)[0]);">
+		          <tr id="{$T.id}" proId="{$T.pro_organization_id}" level_="{$T.level_}" ondblclick="viewJs.toEdit($('#ids', this)[0]);" {#if viewJs.searchType == 'H'}style="background:#FFFF{#if $T.level_ == 0}AA{#/if}{#if $T.level_ == 1}BB{#/if}{#if $T.level_ == 2}DD{#/if}{#if $T.level_ == 3}EE{#/if}{#if $T.level_ == 4}FF{#/if};{#/if}">
 		            <td>
 		              <input type="checkbox" name="ids" id="ids" value="{$T.id}" />
 		            </td>
-		            <td style="text-align: left;padding-left: {$T.level_*10 + 10}px;">{$T.name_}</td>
+		            <td style="text-align: left;{#if viewJs.searchType == 'H'}padding-left: {$T.level_*20}px;{#/if}">
+		              {#if viewJs.searchType == 'H'}
+		              <img class="ui-icon ui-icon-plus"  style="display: inline-block;margin: 2px;" onclick="viewJs.listTree(event, {$T.level_ + 1}, this)" title="展开"/>
+		              {#/if}
+		              {$T.name_}
+		            </td>
 		            <!-- 
 		            <td>{$T.company_name}</td>
 		             -->
 		            <td>{$T.code_}</td>
 		            <td>{$T.desc_}</td>
-		            <td>{$T.record_status_name}</td>
+		            <td>{dVal("CM.status", "name_", {PK_ID:$T.record_status})}</td>
 		          </tr>
               </textarea>
             </td>
@@ -287,12 +377,22 @@ var g$v<%=view_id%> = $.extend(newView(), {
                 <td class="label">描述：</td>
                 <td><input type="text" name="organization.desc_" maxlength="50"/></td>
               </tr>
+              <!--
               <tr>
                 <td class="label">部门负责人：</td>
                 <td>
                   <select name="organization.leader_id" id="organization.leader_id" required="required">
                   </select>
                 </td>
+              </tr> 
+               -->
+              <tr>
+                <td width="25%" class="label">应收金额比率(%)：</td>
+                <td><input type="text" name="organization.ar_rate" required1="required" maxlength="5"/></td>
+              </tr>
+              <tr>
+                <td width="25%" class="label">佣金比率(%)：</td>
+                <td><input type="text" name="organization.commission_rate" required1="required" maxlength="5"/></td>
               </tr>
               <tr>
                 <td class="label">次序：</td>

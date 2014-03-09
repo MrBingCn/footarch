@@ -99,12 +99,15 @@ public class PrivilegeBO
     }
 
 
-    public ArrayPageList<Privilege> possessedByUser(Long userId) throws Exception {
+    public ArrayPageList<Privilege> possessedByUser(Long userId) {
+    	/*
         String Sql = String.format(PrivilegeSO.PRIVILEGE_PROSESSED_BY_USER, userId) ;
         return (ArrayPageList<Privilege>)jdbcDao.query(new StringBuffer(Sql), null, null, Privilege.class);
+        */
+    	throw new BusinessException("Not Support method!");
     }
     
-    public ArrayPageList<Privilege> possessedByOrganization(Long organizationId) throws Exception {
+    public ArrayPageList<Privilege> possessedByOrganization(Long organizationId) {
     	/*
         String Sql = String.format(PrivilegeCriterion.PRIVILEGE_PROSESSED_BY_ORGANIZATION, organizationId) ;
         return (ArrayPageList<Privilege>)jdbcDao.query(new StringBuffer(Sql), null, null, Privilege.class);
@@ -132,9 +135,7 @@ public class PrivilegeBO
         
         ArrayPageList<Privilege> privileges =
             (ArrayPageList<Privilege>)jdbcDao.query(new StringBuffer(Sql), null, null, Privilege.class);      
-        
 
-        
         return privileges ;
         */
     	PrivilegeSO so = new PrivilegeSO() ;

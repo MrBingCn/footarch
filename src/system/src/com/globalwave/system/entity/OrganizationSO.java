@@ -26,6 +26,9 @@ public class OrganizationSO extends BaseSO {
     private Long[] organizationIds ;
 
     @Column(name="pro_organization_id")
+    private Long pro_organization_id ;
+    
+    @Column(name="pro_organization_id")
     @Comparison(operator=Comparison.NE)
     private Long pro_organization_id_exclude ;
 
@@ -38,6 +41,8 @@ public class OrganizationSO extends BaseSO {
 
     @Comparison(operator=Comparison.NE)
     private String record_status ;
+    
+    private Integer level_ ;
     
     public Long[] getOrganizationIds() {
         return organizationIds;
@@ -94,6 +99,18 @@ public class OrganizationSO extends BaseSO {
 	}
 	public void setCompany_id(Long company_id) {
 		this.company_id = company_id;
+	}
+	public Integer getLevel_() {
+		return level_;
+	}
+	public void setLevel_(Integer level_) {
+		this.level_ = level_;
+	}
+	public Long getPro_organization_id() {
+		return pro_organization_id;
+	}
+	public void setPro_organization_id(Long pro_organization_id) {
+		this.pro_organization_id = pro_organization_id;
 	}
 	
 	

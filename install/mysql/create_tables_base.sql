@@ -1,6 +1,5 @@
 drop table if exists sys_user;
 
-drop table if exists sys_organization;
 
 drop table if exists sys_organization_privilege;
 
@@ -58,24 +57,28 @@ create table sys_user  (
 /*==============================================================*/
 /* Table: SYS_organization                                    */
 /*==============================================================*/
+drop table if exists sys_organization;
 create table sys_organization  (
-   id                 bigint(12)                      not null AUTO_INCREMENT,
-   pro_organization_id bigint(12)                     default 0,
-   company_id         bigint(12)                     default 0,
-   code_              VARCHAR(8)                     default '',
+   id                 bigint(12)       not null AUTO_INCREMENT,
+   pro_organization_id bigint(12)      default 0,
+   company_id         bigint(12)       default 0,
+   code_              VARCHAR(8)       default '',
    name_              VARCHAR(64),
    desc_              VARCHAR(64),
-   leader_id         bigint(12),
+   leader_id          bigint(12),
     
-   level_               int comment '层次',
-   order_               int comment '先后顺序',
+   level_             int comment '下订单的代理等级，0:台湾工厂，1:省级代理，2:市级代理，3:区级代理，4:终端代理，5:预留代理',
+   order_             int comment '先后顺序',
    
-   record_status     CHAR(1) default 'A' NOT NULL,
-   created_by        varchar(50) comment '创建的操作员Login_ID',
-   created_on        datetime comment '创建的时间',
-   updated_by        varchar(50) comment '更新的操作员Login_ID',
-   updated_on        datetime comment '更新的时间，同时用作version_id',
-   version_id        bigint comment '用于做DAO层的版本控制',
+   ar_rate            decimal(12,2) comment '单位%，应收金额比率，本级ar_rate-上级ar_rate-commission_rate应该大于8',
+   commission_rate    decimal(12,2) comment '单位%，佣金比率',
+   
+   record_status      CHAR(1) default 'A' NOT NULL,
+   created_by         varchar(50) comment '创建的操作员Login_ID',
+   created_on         datetime comment '创建的时间',
+   updated_by         varchar(50) comment '更新的操作员Login_ID',
+   updated_on         datetime comment '更新的时间，同时用作version_id',
+   version_id         bigint comment '用于做DAO层的版本控制',
    
    constraint PK_SYS_ORGANIZATION primary key (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
