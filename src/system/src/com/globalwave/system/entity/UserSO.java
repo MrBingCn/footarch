@@ -30,6 +30,8 @@ public class UserSO extends BaseSO {
 
     private Long company_id  ;
     
+    private Long organization_id;
+    
     private String type_ ;
 
     @Column(name="contact_id")
@@ -140,6 +142,13 @@ public class UserSO extends BaseSO {
 	public void setStatus_(String status_) {
 		this.status_ = status_;
 	}
+	public Long getOrganization_id() {
+		return organization_id;
+	}
+	public void setOrganization_id(Long organization_id) {
+		this.organization_id = organization_id;
+	}
+	
 	@Override
 	public Class<?> getTableClass() {
 		return User.class;
