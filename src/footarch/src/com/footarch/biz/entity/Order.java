@@ -39,6 +39,29 @@ public class Order extends BaseEntity {
 	private String status_payment;//'支付状态:未支付（0），已支付（1）'
 	private String status_checkout;//'出账状态:未出帐（0），可出帐（1），已出帐（2）'
 	
+	private int order_agent_level ; //'下订单的代理等级，0:台湾工厂，1:省级代理，2:市级代理，3:区级代理，4:终端代理，5:预留代理',
+	private double ar_amount_0 ;//'零级代理/台湾工厂的 应收金额',
+
+	private long agent_id_1 ;//'一级代理/省级代理 的 id',
+	private double ar_amount_1 ; //'一级代理/省级代理 的 应收金额',
+	
+	private long agent_id_2;//'二级代理/市级代理 的 id',
+	private double ar_amount_2 ; // '二级代理/市级代理 的 应收金额',
+	
+	private long agent_id_3 ;//'三级代理/区级代理 的 id',
+	private double ar_amount_3 ; //'三级代理/区级代理 的 应收金额',
+
+	private long agent_id_4 ;//'四级代理/终端代理 的 id',
+	private double ar_amount_4 ; //'四级代理/终端代理 的 应收金额',
+	
+	private long agent_id_5 ;//'五级代理/预留代理 的 id',
+	private double ar_amount_5 ; //'五级代理/预留代理 的 应收金额',
+
+	private long sale_id     ;// '销售员，预留，用于提成，出报表',
+	private String sale_name ;// '销售员，预留，用于提成，出报表',
+	private double commission ;//  decimal(12,2) default 0.00 not null comment '佣金；回扣',
+	
+	
 	public Long getId() {
 		return id;
 	}
@@ -158,5 +181,95 @@ public class Order extends BaseEntity {
 	}
 	public void setStatus_checkout(String status_checkout) {
 		this.status_checkout = status_checkout;
+	}
+	public int getOrder_agent_level() {
+		return order_agent_level;
+	}
+	public void setOrder_agent_level(int order_agent_level) {
+		this.order_agent_level = order_agent_level;
+	}
+	public double getAr_amount_0() {
+		return ar_amount_0;
+	}
+	public void setAr_amount_0(double ar_amount_0) {
+		this.ar_amount_0 = ar_amount_0;
+	}
+	public long getAgent_id_1() {
+		return agent_id_1;
+	}
+	public void setAgent_id_1(long agent_id_1) {
+		this.agent_id_1 = agent_id_1;
+	}
+	public double getAr_amount_1() {
+		return ar_amount_1;
+	}
+	public void setAr_amount_1(double ar_amount_1) {
+		this.ar_amount_1 = ar_amount_1;
+	}
+	public long getAgent_id_2() {
+		return agent_id_2;
+	}
+	public void setAgent_id_2(long agent_id_2) {
+		this.agent_id_2 = agent_id_2;
+	}
+	public double getAr_amount_2() {
+		return ar_amount_2;
+	}
+	public void setAr_amount_2(double ar_amount_2) {
+		this.ar_amount_2 = ar_amount_2;
+	}
+	public long getAgent_id_3() {
+		return agent_id_3;
+	}
+	public void setAgent_id_3(long agent_id_3) {
+		this.agent_id_3 = agent_id_3;
+	}
+	public double getAr_amount_3() {
+		return ar_amount_3;
+	}
+	public void setAr_amount_3(double ar_amount_3) {
+		this.ar_amount_3 = ar_amount_3;
+	}
+	public long getAgent_id_4() {
+		return agent_id_4;
+	}
+	public void setAgent_id_4(long agent_id_4) {
+		this.agent_id_4 = agent_id_4;
+	}
+	public double getAr_amount_4() {
+		return ar_amount_4;
+	}
+	public void setAr_amount_4(double ar_amount_4) {
+		this.ar_amount_4 = ar_amount_4;
+	}
+	public long getAgent_id_5() {
+		return agent_id_5;
+	}
+	public void setAgent_id_5(long agent_id_5) {
+		this.agent_id_5 = agent_id_5;
+	}
+	public double getAr_amount_5() {
+		return ar_amount_5;
+	}
+	public void setAr_amount_5(double ar_amount_5) {
+		this.ar_amount_5 = ar_amount_5;
+	}
+	public long getSale_id() {
+		return sale_id;
+	}
+	public void setSale_id(long sale_id) {
+		this.sale_id = sale_id;
+	}
+	public String getSale_name() {
+		return sale_name;
+	}
+	public void setSale_name(String sale_name) {
+		this.sale_name = sale_name;
+	}
+	public double getCommission() {
+		return commission;
+	}
+	public void setCommission(double commission) {
+		this.commission = commission;
 	}
 }
