@@ -1,9 +1,6 @@
 package com.globalwave.system.entity;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
@@ -15,7 +12,6 @@ import org.dom4j.Element;
 import com.globalwave.common.ArrayPageList;
 import com.globalwave.common.Convertor;
 import com.globalwave.common.U;
-import com.globalwave.common.cache.CodeHelper;
 import com.globalwave.common.exception.BusinessException;
 
 public class SessionUser {
@@ -24,10 +20,10 @@ public class SessionUser {
     final public static boolean IS_VALIDE_PRIVILEGE = true ;
     
     private User user ;
-    private Set<Short> organization_ids ;
+    private long[] organization_ids ;
     private Set<Short> privilege_ids ;
     private Set<String> role_codes ;
-    private Set<Long> underLines ;//下属id
+    //private Set<Long> underLines ;//下属id
     private Map<Long,MarkIt> marks ;
     
     private ArrayPageList<Privilege> privileges ;
@@ -98,7 +94,7 @@ public class SessionUser {
     	return role_codes != null && role_codes.contains("ADMIN");
     }
     
-    
+    /*
     //获取下属用户id
     public Set<Long> getUnderlings() {
     	if (underLines != null) {
@@ -152,12 +148,12 @@ public class SessionUser {
     	}
     	
     	return orgs ;
-    }
+    }*/
     
-    public Set<Short> getOrganization_ids() {
+    public long[] getOrganization_ids() {
         return organization_ids;
     }
-    public void setOrganization_ids(Set<Short> organization_ids) {
+    public void setOrganization_ids(long[] organization_ids) {
         this.organization_ids = organization_ids;
     }
     public Set<Short> getPrivilege_ids() {
@@ -223,7 +219,7 @@ public class SessionUser {
         	Convertor.addProperty(root, "terminal_code", terminal_code == null?"":terminal_code) ;
         	
             root.add(Convertor.list2Xml(privilege_ids,"privilege_ids")) ;
-            root.add(Convertor.list2Xml(organization_ids,"organization_ids")) ;
+            //root.add(Convertor.list2Xml(organization_ids,"organization_ids")) ;
         } catch (Exception e) {
             root.addElement("message").addText("Conver array page list to xml error!") ;
         }

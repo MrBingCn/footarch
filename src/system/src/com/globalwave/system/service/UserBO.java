@@ -465,8 +465,20 @@ public class UserBO extends BaseServiceImpl {
         else {
 
         }*/
-        
+        Long org_id = userResult.getOrganization_id() ;
+        if (org_id != null) {
+        	Integer level = CodeHelper.getInteger("Organization", "level_", org_id) ;
+        	
+        	long[] orgIds = new long[level + 1] ;
+        	sessionUser.setOrganization_ids(orgIds);
+        	orgIds[level] = org_id ;
+        			
+        	for (; level > 0 ; level --) {
+        		orgIds[level - 1] = CodeHelper.getLong("Organization", "pro_organization_id", orgIds[level]) ;
+        	}
+        }
 
+        
         //sessionUser.setMarks(this.getMarkItBO().queryByUserId(userResult.getId())) ;
     	return sessionUser ;
     }

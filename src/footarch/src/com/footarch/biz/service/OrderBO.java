@@ -20,6 +20,7 @@ import com.globalwave.common.ArrayPageList;
 //import com.globalwave.common.cache.CodeHelper;
 import com.globalwave.common.cache.CodeHelper;
 import com.globalwave.common.exception.BusinessException;
+import com.globalwave.system.entity.SessionUser;
 
 @Service("orderBO")
 @Scope("prototype")
@@ -103,6 +104,47 @@ public class OrderBO extends BaseServiceImpl {
 		
 		order.setTotal(new Double(total_product.add(ship).add(adjustment_product).add(adjustment_ship).add(adjustment_order).add(adjustment_manual).doubleValue()));
 		update(order);
+	}
+
+	/**
+	 * 计算汇总订单各级代理的Ar和Commission
+	 * 
+	 * @param order
+	 */
+	public void sumArAndCommission(Order order) {
+	    SessionUser user = SessionUser.get() ;
+	    
+	    long[] orgIds = user.getOrganization_ids() ;
+	    
+	    order.setOrder_agent_level(orgIds.length) ;
+
+	    double total = order.getTotal() ;
+	    
+	    for (int i = orgIds.length - 1 ; i >= 0  ; i --) {
+	    	long orgId = orgIds[i];
+	    	double ar = total * CodeHelper.getAsDouble("Organization", "ar_rate", orgId) ;
+	    	
+	    	if (i == 0) {
+		    	order.setAr_amount_0(ar) ;
+	    	} else if (i == 1) {
+		    	order.setAgent_id_1(orgId) ;
+		    	order.setAr_amount_1(ar);
+	    	} else if (i == 2) {
+		    	order.setAgent_id_2(orgId) ;
+		    	order.setAr_amount_2(ar);
+	    	} else if (i == 3) {
+		    	order.setAgent_id_3(orgId) ;
+		    	order.setAr_amount_3(ar);
+	    	} else if (i == 4) {
+		    	order.setAgent_id_4(orgId) ;
+		    	order.setAr_amount_4(ar);
+	    	} else if (i == 5) {
+		    	order.setAgent_id_5(orgId) ;
+		    	order.setAr_amount_5(ar);
+	    	}
+	    }
+	    
+    	order.setCommission(total * CodeHelper.getAsDouble("Organization", "commission_rate", orgIds[orgIds.length - 1])) ;
 	}
 	
 	public void notifyPay(Long pid) {
