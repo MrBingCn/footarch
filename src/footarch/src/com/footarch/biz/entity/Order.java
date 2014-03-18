@@ -14,7 +14,7 @@ import com.globalwave.base.annotations.Versionable;
 import com.globalwave.common.ArrayPageList;
 
 @Entity
-@Table(name = "biz_order")
+@Table(name = "biz_order_sale")
 @Versionable
 public class Order extends BaseEntity {
 	@Id
@@ -25,6 +25,7 @@ public class Order extends BaseEntity {
 	private Timestamp time_place;//'提交订单时间'
 	private Timestamp time_pay;// '支付时间'
 	private Timestamp time_checkout;//'出账时间'
+	private String promotion_flag;
 	
 	private Double total_product;//'商品总金额'
 	private Double ship;//'运费金额'
@@ -281,5 +282,11 @@ public class Order extends BaseEntity {
 	}
 	public void setItems(ArrayPageList<OrderItems> items) {
 		this.items = items;
+	}
+	public String getPromotion_flag() {
+		return promotion_flag;
+	}
+	public void setPromotion_flag(String promotion_flag) {
+		this.promotion_flag = promotion_flag;
 	}
 }
