@@ -7,9 +7,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.globalwave.base.BaseEntity;
 import com.globalwave.base.annotations.Versionable;
+import com.globalwave.common.ArrayPageList;
 
 @Entity
 @Table(name = "biz_order")
@@ -38,6 +40,8 @@ public class Order extends BaseEntity {
 	private String status;//'订单状态: 购物车（P）,已提交（M）,已支付（C），已打包（A），已发货（D），已取消（X）'
 	private String status_payment;//'支付状态:未支付（0），已支付（1）'
 	private String status_checkout;//'出账状态:未出帐（0），可出帐（1），已出帐（2）'
+	@Transient
+	private ArrayPageList<OrderItems> items;
 	
 	private int order_agent_level ; //'下订单的代理等级，0:台湾工厂，1:省级代理，2:市级代理，3:区级代理，4:终端代理，5:预留代理',
 	private double ar_amount_0 ;//'零级代理/台湾工厂的 应收金额',
@@ -271,5 +275,11 @@ public class Order extends BaseEntity {
 	}
 	public void setCommission(double commission) {
 		this.commission = commission;
+	}
+	public ArrayPageList<OrderItems> getItems() {
+		return items;
+	}
+	public void setItems(ArrayPageList<OrderItems> items) {
+		this.items = items;
 	}
 }
