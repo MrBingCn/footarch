@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.footarch.biz.entity.Order;
 import com.footarch.biz.entity.OrderItems;
 import com.footarch.biz.entity.OrderItemsSO;
 import com.footarch.biz.entity.Product;
@@ -16,35 +17,25 @@ import com.globalwave.common.exception.BusinessException;
 @Scope("prototype")
 @Transactional
 public class OrderItemsBO extends BaseServiceImpl {
-	private ProductBO productBO;
-	
-    public OrderItems get(Long id) { 
-    	if (id == null) {// id is require
-    		throw new BusinessException("orderItems id is required") ;
-    	}
-    	OrderItems orderItems = new OrderItems() ;
-    	orderItems.setId(id) ;
-    	orderItems = (OrderItems) jdbcDao.get(orderItems) ;
-    	initOrder(orderItems);
-    	return orderItems;
-    }
-	
-	public OrderItems create(OrderItems orderItems) {
-		Product product = productBO.get(orderItems.getCatentry_id());
+	public Order create(OrderItems orderItems) {
+		Product product = getProductBO().get(orderItems.getCatentry_id());
 		if (product == null) {
 			throw new BusinessException("product is not found for product_id:" + orderItems.getCatentry_id().longValue()) ;
 		}
 		orderItems.setName(product.getName_cn());
 		orderItems.setList_price(product.getMarket_price());
 		orderItems.setPrice(product.getSelling_price());
-
 		orderItems = (OrderItems) jdbcDao.insert(orderItems);
-		getOrderBO().refreshTotal(orderItems.getOrder());
-		return orderItems;
+		
+		Order order = getOrderBO().get(orderItems.getOrder_id());
+		getPromotionBO().caculate(order);
+		getOrderBO().refreshTotal(order);
+		return order;
 	}
 	
 	public void update(OrderItems orderItems) {
 		jdbcDao.update(orderItems);
+		getPromotionBO().caculate(orderItems.getOrder());
 		getOrderBO().refreshTotal(orderItems.getOrder());
 	}
 	
@@ -55,6 +46,7 @@ public class OrderItemsBO extends BaseServiceImpl {
 			getOrderBO().delete(orderItems.getOrder(), false);
 		}
 		else {
+			getPromotionBO().caculate(orderItems.getOrder());
 			getOrderBO().refreshTotal(orderItems.getOrder());
 		}
 	}
@@ -80,12 +72,12 @@ public class OrderItemsBO extends BaseServiceImpl {
 	public OrderBO getOrderBO() {
 		return (OrderBO)CodeHelper.getAppContext().getBean("orderBO");
 	}
-
-	public ProductBO getProductBO() {
-		return productBO;
+	
+	public PromotionBO getPromotionBO() {
+		return (PromotionBO)CodeHelper.getAppContext().getBean("promotionBO");
 	}
-
-	public void setProductBO(ProductBO productBO) {
-		this.productBO = productBO;
+	
+	public ProductBO getProductBO() {
+		return (ProductBO)CodeHelper.getAppContext().getBean("productBO");
 	}
 }

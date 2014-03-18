@@ -30,7 +30,10 @@ public class OrderBO extends BaseServiceImpl {
 	private OrderItemsBO orderItemsBO;
 	
 	public Order create(Order order) {
-		return (Order) jdbcDao.insert(order);
+		jdbcDao.insert(order);
+		//获取默认值
+		order = (Order) jdbcDao.get(order);
+		return order;
 	}
 	
 	public void update(Order order) {
@@ -76,7 +79,9 @@ public class OrderBO extends BaseServiceImpl {
     	orderSO.setPageIndex(ArrayPageList.PAGEINDEX_NO_PAGE);
     	ArrayPageList<Order> orders = query(orderSO);
     	if (orders != null && orders.size() > 0) {
-    		return orders.get(0);
+    		Order order = orders.get(0);
+    		order.setItems(orderItemsBO.getItemsByOrderId(order.getId()));
+    		return order;
     	}
     	return null;
     }

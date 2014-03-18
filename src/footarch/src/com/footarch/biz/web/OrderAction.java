@@ -37,6 +37,16 @@ public class OrderAction extends BaseAction implements Preparable {
 	private Order order;
 	private OrderItems orderItems;
 	
+	//查询购物车
+	//http://www.footarch.com:8080/biz/order_getShopCar.action
+	public String getShopCar() throws Exception {
+		Long userId = SessionUser.get().getUser().getId();
+		//查找购物车
+		Order order = orderBO.getShopCar(userId);
+		renderObject(order, ResponseMessage.KEY_OPERATE_OK);
+		return null;
+	}
+	
 	//添加到购物车
 	//http://www.footarch.com:8080/biz/order_addToShopCar.action?orderItems.catentry_id=1&orderItems.quantity=1
 	public String addToShopCar() throws Exception {
@@ -52,43 +62,60 @@ public class OrderAction extends BaseAction implements Preparable {
 			order.setStatus("T");
 			order.setUser_id(userId);
 			order = orderBO.create(order);
-			//获取默认值
-			order = orderBO.get(order.getId()); 
 		}
 		orderItems.setOrder_id(order.getId());
-		orderItems.setOrder(order);
-		orderItemsBO.create(orderItems);
+		order = orderItemsBO.create(orderItems);
 		
-		renderJson(getOrderDetail(order, true, false, false));
+		renderObject(order, ResponseMessage.KEY_CREATE_OK);
 		return null;
 	}
 	
 	//修改购物车中商品数量
-	//http://www.footarch.com:8080/biz/order_updateQuantity.action?orderItems.id=12&orderItems.quantity=3
+	//http://www.footarch.com:8080/biz/order_updateQuantity.action?orderItems.order_id=1&orderItems.id=12&orderItems.quantity=3
 	public String updateQuantity() throws Exception {
-		if (orderItems.getId() == null || orderItems.getQuantity() == null) {
-			throw new BusinessException("order item id or quantity is required") ;
+		if (orderItems.getOrder_id() == null || orderItems.getId() == null || orderItems.getQuantity() == null) {
+			throw new BusinessException("order id or item id or quantity is required") ;
 		}
-		OrderItems item = orderItemsBO.get(orderItems.getId());
-		checkMyOrder(item.getOrder());
-		checkCanModify(item.getOrder());
-		item.setQuantity(orderItems.getQuantity());
-		orderItemsBO.update(item);
-		renderJson(getOrderDetail(item.getOrder(), true, false, false));
+		Order order = orderBO.get(orderItems.getOrder_id());
+		checkMyOrder(order);
+		checkCanModify(order);
+		for (OrderItems item : order.getItems()) {
+			if (item.getId().longValue() == orderItems.getId().longValue()) {
+				item.setQuantity(orderItems.getQuantity());
+				item.setOrder(order);
+				orderItemsBO.update(item);
+				break;
+			}
+		}
+		
+		renderObject(order, ResponseMessage.KEY_UPDATE_OK);
 		return null;
 	}
 	
 	//删除购物车中的商品
-	//http://www.footarch.com:8080/biz/order_deleteOrderItem.action?orderItems.id=12
+	//http://www.footarch.com:8080/biz/order_deleteOrderItem.action?orderItems.order_id=1&orderItems.id=12
 	public String deleteOrderItem() throws Exception {
-		if (orderItems.getId() == null) {
-			throw new BusinessException("order item id is required") ;
+		if (orderItems.getOrder_id() == null || orderItems.getId() == null) {
+			throw new BusinessException("order id or item id is required") ;
 		}
-		OrderItems item = orderItemsBO.get(orderItems.getId());
-		checkMyOrder(item.getOrder());
-		checkCanModify(item.getOrder());
-		orderItemsBO.delete(item);
-		renderJson(getOrderDetail(item.getOrder(), true, false, false));
+		Order order = orderBO.get(orderItems.getOrder_id());
+		//OrderItems item = orderItemsBO.get(orderItems.getId());
+		checkMyOrder(order);
+		checkCanModify(order);
+		OrderItems oi = null;
+		for (OrderItems item : order.getItems()) {
+			if (item.getId().longValue() == orderItems.getId().longValue()) {
+				oi = item;
+				break;
+			}
+		}
+		if (oi != null) {
+			oi.setOrder(order);
+			order.getItems().remove(oi);
+			orderItemsBO.delete(oi);
+		}
+		
+		renderObject(order, ResponseMessage.KEY_DELETE_OK);
 		return null;
 	}
 	
@@ -202,21 +229,18 @@ public class OrderAction extends BaseAction implements Preparable {
 		Order order = orderBO.get(this.id) ;
 		checkMyOrder(order);
 		
-        renderJson(getOrderDetail(order, true, true, true)) ;
+        renderJson(getOrderDetail(order)) ;
         return null ;  
 	}
 	
-	private String getOrderDetail(Order order, boolean withItems, boolean withAddress, boolean withPaymen) {
+	private String getOrderDetail(Order order) {
 		Gson gson = GsonUtil.getGson();
 		JsonObject jsonObject = new JsonObject(); 
         jsonObject.add("order", gson.toJsonTree(order));
-        if (withItems) {
-        	jsonObject.add("items", gson.toJsonTree(orderItemsBO.getItemsByOrderId(order.getId())));
-        }
-        if (withAddress && order.getAddress_id() != null) {
+        if (order.getAddress_id() != null) {
         	jsonObject.add("address", gson.toJsonTree(getAddressBO().get(order.getAddress_id())));
         }
-        if (withPaymen && order.getStatus_payment().equals("1") && order.getPayment_type().equals("-1")) {
+        if (order.getStatus_payment().equals("1") && order.getPayment_type().equals("-1")) {
         	PaymentSO paymentSO = new PaymentSO();
         	paymentSO.setOrder_id(order.getId());
         	paymentSO.setStatus("1");
