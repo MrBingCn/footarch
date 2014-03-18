@@ -2,6 +2,8 @@ drop table if exists biz_address;
 drop table if exists biz_order;
 drop table if exists biz_order_items;
 drop table if exists biz_order_payment;
+drop table if exists biz_promotion;
+drop table if exists biz_order_promotion;
 
 /*==============================================================*/
 /* Table: 地址表                                                                                                                                */
@@ -31,7 +33,7 @@ create table biz_address  (
 /*==============================================================*/
 /* Table: 订单主表                                                                                                                            */
 /*==============================================================*/
-create table biz_order  (
+create table biz_order_sale  (
    id                bigint(12) not null AUTO_INCREMENT,
    user_id           bigint(12) not null,
    address_id        bigint(12),
@@ -77,6 +79,7 @@ create table biz_order  (
    status            CHAR(1) default 'P' NOT NULL comment '订单状态: 购物车（T）,已提交（M）,已支付（C），已审核（A），已打包（P），已发货（D），已取消（X）',
    status_payment    CHAR(1) default '0' NOT NULL comment '支付状态:未支付（0），已支付（1,若是线下付款，则订单提交后为已支付）', 
    status_checkout   CHAR(1) default '0' NOT NULL comment '出账状态:未出帐（0），可出帐（1），已出帐（2）', 
+   promotion_flag    CHAR(1) default '0' NOT NULL comment '0:计算促销，1：不计算促销',
    created_by        varchar(50) comment '创建的操作员Login_ID',
    created_on        datetime comment '创建的时间',
    updated_by        varchar(50) comment '更新的操作员Login_ID',
@@ -99,6 +102,7 @@ create table biz_order_items  (
    price             decimal(12,2) not null comment '售价',
    quantity          int default 1 not null, 
    adjustment        decimal(12,2) default 0.00 not null comment '调整金额',
+   gift              CHAR(1) default '0' NOT NULL comment '赠品（1），非赠品（0）',
 
    created_by        varchar(50) comment '创建的操作员Login_ID',
    created_on        datetime comment '创建的时间',
@@ -131,8 +135,48 @@ create table biz_order_payment  (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
+/*==============================================================*/
+/* Table: 促销表                                                                                                                            */
+/*==============================================================*/
+create table biz_promotion  (
+   id                bigint(12) not null AUTO_INCREMENT,
+   name              varchar(50) not null comment '名称',
+   pro_type          char(1) not null comment '促销类型，0:满赠，1:满减，2：免邮',
+   condition_money   decimal(12,2) comment '满足促销的金额条件',
+   condition_quantity bigint(12) default 0 comment '满足促销的数量条件',
+   catentry_id       varchar(100) comment '用于满赠，多个商品id用逗号隔开',
+   discount_type     char(1) comment '满减类型，0:折扣百分比，1:折扣金额',
+   discount_per      bigint(12) comment '折扣百分比，只用于满减',
+   discount_moeny    decimal(12,2) comment '折扣金额，只用于满减',
+   exclusion         CHAR(1) default '0' NOT NULL comment '是否排斥其他促销，不排斥（1），排斥（0）',
+   weight            bigint(12) default 0 not null comment '权重，由大到小',
+   
+   begin_date        datetime comment '开始时间',
+   end_date          datetime comment '截至时间',
+   status            CHAR(1) default '0' NOT NULL comment '未激活（0），激活（1）',
+   
+   created_by        varchar(50) comment '创建的操作员Login_ID',
+   created_on        datetime comment '创建的时间',
+   updated_by        varchar(50) comment '更新的操作员Login_ID',
+   updated_on        datetime comment '更新的时间，同时用作version_id',
+   version_id        bigint comment '用于做DAO层的版本控制',
+   
+   constraint PK_BIZ_PROMOTION primary key (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-
+create table biz_order_promotion  (
+   id                bigint(12) not null AUTO_INCREMENT,
+   order_id          bigint(12) not null,
+   promotion_id      bigint(12) not null,
+   
+   created_by        varchar(50) comment '创建的操作员Login_ID',
+   created_on        datetime comment '创建的时间',
+   updated_by        varchar(50) comment '更新的操作员Login_ID',
+   updated_on        datetime comment '更新的时间，同时用作version_id',
+   version_id        bigint comment '用于做DAO层的版本控制',
+   
+   constraint PK_BIZ_ORDER_PROMOTION primary key (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*==============================================================*/
 /* Table: 产品分类                                                                                                                            */
