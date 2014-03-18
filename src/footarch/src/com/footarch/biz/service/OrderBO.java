@@ -43,6 +43,7 @@ public class OrderBO extends BaseServiceImpl {
 		update(order);
 	}
 
+	//logic=true:逻辑删除，只是打标记，否则物理删除
 	public void delete(Order order, boolean logic) {
 		if (logic) {
 			delete(order);
@@ -63,7 +64,9 @@ public class OrderBO extends BaseServiceImpl {
     	}
     	Order order = new Order() ;
     	order.setId(id) ;
-        return (Order) jdbcDao.get(order) ;
+        order = (Order) jdbcDao.get(order) ;
+        order.setItems(orderItemsBO.getItemsByOrderId(order.getId()));
+        return order;
     }
     
     public Order getShopCar(Long userId) { 
@@ -83,7 +86,11 @@ public class OrderBO extends BaseServiceImpl {
 		if (order == null) {
 			return;
 		}
-		ArrayPageList<OrderItems> items = orderItemsBO.getItemsByOrderId(order.getId());
+		ArrayPageList<OrderItems> items = order.getItems();
+		if (items == null) {
+			items = orderItemsBO.getItemsByOrderId(order.getId());
+		}
+		
 		BigDecimal total_product = new BigDecimal(0);
 		BigDecimal adjustment_product = new BigDecimal(0);
 		for (OrderItems item : items) {
