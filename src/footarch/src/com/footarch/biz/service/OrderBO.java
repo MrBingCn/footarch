@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.footarch.biz.entity.Order;
 import com.footarch.biz.entity.OrderItems;
-import com.footarch.biz.entity.OrderItemsSO;
+//import com.footarch.biz.entity.OrderItemsSO;
 import com.footarch.biz.entity.OrderSO;
 import com.footarch.biz.entity.Payment;
 import com.globalwave.base.BaseServiceImpl;
