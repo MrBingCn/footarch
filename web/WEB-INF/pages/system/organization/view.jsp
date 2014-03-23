@@ -1,7 +1,15 @@
+<%@page import="com.globalwave.system.entity.Role"%>
+<%@page import="com.globalwave.system.entity.SessionUser"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
 <%
 String view_id=request.getParameter("view_id");
+
+SessionUser sUser = SessionUser.get() ;
+boolean isAdmin = sUser.getRole_codes().contains(Role.CODE_ADMIN);
+
+long orgId = sUser.getDirect_organization_id() ;
+long proOrgId = sUser.getPro_organization_id() ;
 %>
 
 <script>
@@ -35,7 +43,12 @@ var g$v<%=view_id%> = $.extend(newView(), {
             valueProperty:"id"
         }) ;
 
+        <%if (isAdmin) {%>
         var organizationOptions = filter(g$dict.Organization, {record_status:'A', level_:[0,1,2,3]});
+        <%} else {%>
+        var organizationOptions = filter(g$dict.Organization, {record_status:'A', PK_ID:[<%=orgId%>, <%=proOrgId%>]});
+        <%}%>
+
         E$("organization.pro_organization_id").combobox2({
             data:organizationOptions, 
             firstLabel:"[无上级级织]", 
@@ -311,9 +324,13 @@ var g$v<%=view_id%> = $.extend(newView(), {
           <tr>
             <td>
               <textarea rows="1" cols="1" id="templateBody" jTemplate="true">
-		          <tr id="{$T.id}" proId="{$T.pro_organization_id}" level_="{$T.level_}" ondblclick="viewJs.toEdit($('#ids', this)[0]);" {#if viewJs.searchType == 'H'}style="background:#FFFF{#if $T.level_ == 0}AA{#/if}{#if $T.level_ == 1}BB{#/if}{#if $T.level_ == 2}DD{#/if}{#if $T.level_ == 3}EE{#/if}{#if $T.level_ == 4}FF{#/if};{#/if}">
+		          <tr id="{$T.id}" proId="{$T.pro_organization_id}" level_="{$T.level_}" 
+		                           {#if <%=isAdmin %> || $T.id == <%=orgId%> || $T.pro_organization_id == <%=orgId%>}ondblclick="viewJs.toEdit($('#ids', this)[0]);" {#/if}
+		                           {#if viewJs.searchType == 'H'}style="background:#FFFF{#if $T.level_ == 0}AA{#/if}{#if $T.level_ == 1}BB{#/if}{#if $T.level_ == 2}DD{#/if}{#if $T.level_ == 3}EE{#/if}{#if $T.level_ == 4}FF{#/if};{#/if}">
 		            <td>
+		              {#if <%=isAdmin %> || $T.id == <%=orgId%> || $T.pro_organization_id == <%=orgId%>}
 		              <input type="checkbox" name="ids" id="ids" value="{$T.id}" />
+		              {#/if}
 		            </td>
 		            <td style="text-align: left;{#if viewJs.searchType == 'H'}padding-left: {$T.level_*20}px;{#/if}">
 		              {#if viewJs.searchType == 'H'}

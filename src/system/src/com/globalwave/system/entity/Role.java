@@ -16,21 +16,8 @@ import com.globalwave.common.ArrayPageList;
 @Versionable
 public class Role extends BaseEntity {
 	
-	
-	final public static Long ID_CONTACT_BIND_ROLE = new Long(-3) ;
-	
-	/**
-	 * 客户服务--海外客服
-	 */
-	final public static String CODE_CUSTOMER_SERVICE="CUS" ;
-	
-	final public static String CODE_SALES="SALES" ;
 
-	
-	/**
-	 * 操作员
-	 */
-	final public static String CODE_OPERATOR="OP" ;
+	final public static String CODE_ADMIN="ADMIN" ;
 	
 	
     @Id

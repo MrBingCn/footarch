@@ -98,6 +98,7 @@ boolean isDocumentView = "document".equals(type) ;
                     </div>
                 </li>
                 <%if(isAdminView) {%>
+                <% if (sUser.hasPrivilege((short)4001)) { %>
                 <li>
                     <span href="#">产品管理</span>
                     <div>
@@ -106,6 +107,7 @@ boolean isDocumentView = "document".equals(type) ;
                         <a href="javascript:removeAll();openView(13, '/biz/product_view.action', '产品管理')" tabindex="-1">产品管理</a>
                     </div>
                 </li>
+                <%} %>
                 <!-- 
                 <li>
                     <span href="#">基础数据配置</span>
@@ -142,11 +144,18 @@ boolean isDocumentView = "document".equals(type) ;
                 <li>
                     <span href="#">用户管理</span>
                     <div>
+                        <% if (sUser.hasPrivilege((short)2070)) { %>
                         <a href="javascript:removeAll();openView(1, '/system/user_view.action', '用户管理')" tabindex="-1">用户管理</a>
+                        <%} %>
+                        <% if (sUser.hasPrivilege((short)2150)) { %>
                         <a href="javascript:removeAll();openView(2, '/system/role_view.action', '角色管理')" tabindex="-1">角色管理</a>
+                        <%} %>
+                        <% if (sUser.hasPrivilege((short)2140)) { %>
                         <a href="javascript:removeAll();openView(3, '/system/organization_view.action', '部门管理')" tabindex="-1">部门管理</a>
+                        <%} %>
                     </div>
                 </li>
+                <% if (sUser.hasPrivilege((short)2130)) { %>
                 <li>
                     <span href="#">系统管理</span>
                     <div>
@@ -159,6 +168,7 @@ boolean isDocumentView = "document".equals(type) ;
                          -->
                     </div>
                 </li>
+                <%} %>
                 <%} else if (isReportView){%>
                 <li class="active">
                     <span href="#">报表管理</span>

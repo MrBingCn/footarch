@@ -156,6 +156,21 @@ public class SessionUser {
     public void setOrganization_ids(long[] organization_ids) {
         this.organization_ids = organization_ids;
     }
+    
+    /**
+     * 直属组织ID
+     * 
+     * @return
+     */
+    public long getDirect_organization_id() {
+    	return organization_ids[organization_ids.length - 1];
+    }
+    public Long getPro_organization_id() {
+    	if (organization_ids.length > 1) {
+    		return organization_ids[organization_ids.length - 2];
+    	}
+    	return null;
+    }
     public Set<Short> getPrivilege_ids() {
         return privilege_ids;
     }

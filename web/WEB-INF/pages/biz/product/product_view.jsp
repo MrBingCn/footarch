@@ -2,7 +2,11 @@
 
 <%
 String view_id=request.getParameter("view_id");
+String root = request.getContextPath();
 %>
+
+<link type="text/css" rel="stylesheet" href="<%=root%>/plugin/jQuery-TE_v.1.4.0/jquery-te-1.4.0.css">
+<script type="text/javascript" src="<%=root%>/plugin/jQuery-TE_v.1.4.0/jquery-te-1.4.0.min.js" charset="utf-8"></script>
 
 <script>
 
@@ -58,6 +62,7 @@ var g$v<%=view_id%> = $.extend(newView(), {
             $("#viewContactBtn, #viewPartyBtn", viewJs.view).show() ;
         } ;
         
+        E$('product.full_desc').jqte();
         //this.typeOnChange() ;
 
         E$("editScollDiv").height((__clientHeight - 200) + "px") ;
@@ -82,6 +87,7 @@ var g$v<%=view_id%> = $.extend(newView(), {
              formDeserialize("eForm", this.eFormInitData, {}) ;// reset form;
              //this.refreshCustomerServiceRep() ;
              $("#phototr", viewJs.view).hide() ;
+             E$("product.full_desc").jqteVal("");
              return ;
         }
         $("#phototr", viewJs.view).show() ;
@@ -99,6 +105,7 @@ var g$v<%=view_id%> = $.extend(newView(), {
                 formDeserialize("eForm", data, {}) ;
                 //viewJs.refreshCustomerServiceRep() ;
                 _this.showPhotos(data.id, data.main_photo_uuid);
+                E$("product.full_desc").jqteVal(data["full_desc"]);
             }
         );
     },
@@ -344,9 +351,9 @@ var g$v<%=view_id%> = $.extend(newView(), {
                 </td>
               </tr>
               <tr>
-                <td class="label">描述：</td>
-                <td>
-                  <textarea style="height: 60px;"></textarea>
+                <td class="label" valign="top">描述：</td>
+                <td colspan="3">
+                  <textarea name="product.full_desc" id="product.full_desc" style="height: 60px;"></textarea>
                 </td>
               </tr>
               <tr>

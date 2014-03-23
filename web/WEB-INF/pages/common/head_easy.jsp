@@ -25,7 +25,9 @@ I18N i18N = new I18N();
         DD_belatedPNG.fix('.png_tra');
     </script>   
     <![endif]--> 
+    <!-- 
     <script type="text/javascript" src="<%=root%>/js/t.js"></script>
+     -->
     <link href="<%=root%>/css/style.<%=i18n.getLang()%>.css" rel="stylesheet" type="text/css" />
      
 

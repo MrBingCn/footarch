@@ -9,8 +9,8 @@
 	<%@include file="/WEB-INF/pages/common/head_easy.jsp" %>
 
 	<title><%=i18n.html("CompanyName") %></title>
-	<meta name="description" content="宁波华联通国际物流有限公司" />
-	<meta name="keywords" content="宁波华联通国际物流有限公司" />
+	<meta name="description" content="<%=i18n.html("CompanyName") %>" />
+	<meta name="keywords" content="<%=i18n.html("CompanyName") %>" />
 	<meta name="viewport" content="width=960" />
 	<meta name="robots" content="all" />
 	
@@ -42,7 +42,13 @@ boolean isHltUser = true;//sUser.isHltUser();
 			<% if (sUser.hasPrivilege((short)2040)) { %>
 			<a href="<%=root %>/report.jsp" class="i_report">报表</a>
 			<%}%>
-            <% if (sUser.hasPrivilege((short)2050) || sUser.hasPrivilege((short)2060) || sUser.hasPrivilege((short)2070) || sUser.hasPrivilege((short)2072) || sUser.hasPrivilege((short)2073)) { %>
+            <% if (sUser.hasPrivilege((short)2050) 
+            		|| sUser.hasPrivilege((short)2060) 
+            		|| sUser.hasPrivilege((short)2070) 
+            		|| sUser.hasPrivilege((short)2072) 
+                    || sUser.hasPrivilege((short)2073) 
+                    || sUser.hasPrivilege((short)2140)
+            		) { %>
             <a href="<%=root %>/system.jsp" class="i_system">系统设置</a>
             <%}%>
 			<%}%>
