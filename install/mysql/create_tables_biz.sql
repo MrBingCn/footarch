@@ -43,8 +43,8 @@ create table biz_order_sale  (
    total_product     decimal(12,2) default 0.00 not null comment '商品总金额',
    ship              decimal(12,2) default 0.00 not null comment '运费金额',
    adjustment_ship   decimal(12,2) default 0.00 not null comment '运费调整金额',
-   adjustment_product decimal(12,2) default 0.00 not null comment '商品调整金额',
-   adjustment_order  decimal(12,2) default 0.00 not null comment '订单调整金额',
+   adjustment_product decimal(12,2) default 0.00 not null comment '商品级别调整总金额，暂时没用到',
+   adjustment_order  decimal(12,2) default 0.00 not null comment '订单级别调整金额',
    adjustment_manual decimal(12,2) default 0.00 not null comment '手工调整金额',
    total             decimal(12,2) default 0.00 not null comment '整单付款总金额',
    
@@ -101,7 +101,7 @@ create table biz_order_items  (
    list_price        decimal(12,2) not null comment '吊牌价',
    price             decimal(12,2) not null comment '售价',
    quantity          int default 1 not null, 
-   adjustment        decimal(12,2) default 0.00 not null comment '调整金额',
+   adjustment        decimal(12,2) default 0.00 not null comment '调整金额，只用于赠品，暂时没产品级别促销',
    gift              CHAR(1) default '0' NOT NULL comment '赠品（1），非赠品（0）',
 
    created_by        varchar(50) comment '创建的操作员Login_ID',
