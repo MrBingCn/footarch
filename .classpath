@@ -4,6 +4,7 @@
 	<classpathentry kind="src" path="src/resource/src"/>
 	<classpathentry kind="src" path="src/footarch/src"/>
 	<classpathentry kind="src" path="src/common/src"/>
+	<classpathentry kind="src" path="src/footarch/template"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
 	<classpathentry kind="lib" path="web/WEB-INF/lib/antlr-3.0ea8.jar"/>

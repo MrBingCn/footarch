@@ -15,7 +15,51 @@
           </entry>
 
 
+          <!-- distinctOrder + distinctOrderWhere  -->
+          <entry key="distinctOrder">
+            <value>
+              <![CDATA[
+select distinct <<distinct_column>> as id
+ from biz_order_sale o 
+              ]]>
+            </value>
+          </entry>
 
+
+          <entry key="orderWhere">
+            <value>
+              <![CDATA[
+where o.status<>'X'
+ {and o.time_place>=[start_on]}
+ {and o.time_place<=[end_on]}
+
+
+ {and o.order_no like [order_no]}
+ {and o.agent_id_1=[agent_id_1]}
+ {and o.agent_id_2=[agent_id_2]}
+ {and o.agent_id_3=[agent_id_3]}
+ {and o.agent_id_4=[agent_id_4]}
+              ]]>
+            </value>
+          </entry>
+          
+          <entry key="orderOrderBy">
+            <value>
+              <![CDATA[
+  order by <<order_columns>> 
+              ]]>
+            </value>
+          </entry>
+
+          <!-- orderDetailForm + orderWhere  -->
+          <entry key="orderDetailForm">
+            <value>
+              <![CDATA[
+select *
+  from biz_order_sale o 
+              ]]>
+            </value>
+          </entry>
 
         </map>
       </property>

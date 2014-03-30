@@ -40,3 +40,8 @@ insert into cfg_dict (id, pro_dict_id, domain_, code_, name_, desc_, flag_, stat
 
 
 insert into cfg_dict (id, pro_dict_id, domain_, code_, name_, desc_, flag_, status_, order_, ext_s1, ext_s2, ext_s3, ext_s4, ext_s5) values (-101, 0, 'CM.protectProfits', 'Global', '8', '全局保护利润', null, 'A', 1, null, null, null, null, null);
+
+
+
+
+INSERT INTO `cfg_dict` (`id`, `pro_dict_id`, `domain_`, `code_`, `name_`, `desc_`, `status_`, `order_`) VALUES ('-600000001', '0', 'BIZ.Report.report_type', '101', 'AgentProfit', '代理利润表', 'A', '101');
