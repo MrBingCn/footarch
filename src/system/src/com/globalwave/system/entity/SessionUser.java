@@ -163,9 +163,15 @@ public class SessionUser {
      * @return
      */
     public long getDirect_organization_id() {
+    	if (organization_ids == null) {
+    		return 0L;
+    	}
     	return organization_ids[organization_ids.length - 1];
     }
     public Long getPro_organization_id() {
+    	if (organization_ids == null) {
+    		return 0L;
+    	}
     	if (organization_ids.length > 1) {
     		return organization_ids[organization_ids.length - 2];
     	}

@@ -1,7 +1,16 @@
+<%@page import="com.globalwave.system.entity.SessionUser"%>
+<%@page import="com.globalwave.system.entity.Role"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
 <%
 String view_id=request.getParameter("view_id");
+
+
+SessionUser sUser = SessionUser.get() ;
+boolean isAdmin = sUser.getRole_codes().contains(Role.CODE_ADMIN);
+
+long orgId = sUser.getDirect_organization_id() ;
+long proOrgId = sUser.getPro_organization_id() ;
 %>
 
 <script>
@@ -30,8 +39,14 @@ var g$v<%=view_id%> = $.extend(newView(), {
 
         E$("sForm").validator();
         E$("eForm").validator();
-        
+
         var organizationOptions = filter(g$dict.Organization, {record_status:'A'});
+        <%if (!isAdmin) {%>
+        organizationOptions =
+        	$.merge(
+        			filter(organizationOptions, {PK_ID:[<%=orgId%>]}), 
+        			filter(organizationOptions, {pro_organization_id:[<%=orgId%>]})) ;
+        <%}%>
         
         E$("userSO.organization_id").combobox2({id:"userSO.organization_id", 
             data:organizationOptions, 

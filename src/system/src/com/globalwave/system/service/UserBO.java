@@ -42,7 +42,12 @@ public class UserBO extends BaseServiceImpl {
     	
     	userSO.addAsc("name_cn") ;
     	
-        return (ArrayPageList<User>)jdbcDao.query(userSO, User.class);
+        SessionUser sUser = SessionUser.get() ;
+        if (!sUser.getRole_codes().contains(Role.CODE_ADMIN)) {
+        	userSO.setLimited_organization_id(sUser.getDirect_organization_id()) ;
+        }
+        //return (ArrayPageList<User>)jdbcDao.query(userSO, User.class);
+    	return (ArrayPageList<User>)jdbcDao.queryName("systemSQLs:queryUsers", userSO, User.class);
     }
 
     public void checkLoginIdUnified(User user)  {
@@ -68,7 +73,8 @@ public class UserBO extends BaseServiceImpl {
     public User create(User user, Long[] organization_ids, Long[] role_ids) { 
     	
     	checkLoginIdUnified(user) ;
-
+    	checkOperationAuth(user.getOrganization_id(), role_ids);
+    	
     	String pwd = user.getPassword_() ;
         user.setPassword_(Util.hash(pwd)) ;
         //if (user.getContact_id() != null) {
@@ -126,7 +132,9 @@ public class UserBO extends BaseServiceImpl {
      * @param role_ids
      */
     public void update(User user, Long[] organization_ids, Long[] role_ids) {
-        
+
+    	//checkOperationAuth(user.getOrganization_id(), role_ids);
+    	
     	update(user);
     	
         UserOrganization userOrg = new UserOrganization() ;
@@ -146,6 +154,8 @@ public class UserBO extends BaseServiceImpl {
      */
     public void update(User user) {
 
+    	checkOperationAuth(user.getOrganization_id(), null) ;
+    	
         if (StringUtils.isEmpty(user.getPassword_())) {
             user.addExclusions("password_") ;
         } else {
@@ -247,7 +257,10 @@ public class UserBO extends BaseServiceImpl {
     	if (User.TYPE_FOREIGNER_AGENT.equals(user.getType_())) {
     		throw new BusinessException(1111L) ;//当前用户为海外联系人，请通过联系人方式删除！
     	}
-    	
+
+    	// get user just for checkOperationAuth
+		this.get(user.getId());
+		
         UserOrganization userOrg = new UserOrganization() ;
         userOrg.setUser_id(user.getId()) ;
         jdbcDao.delete(UserOrganization.class,userOrg) ;
@@ -289,6 +302,11 @@ public class UserBO extends BaseServiceImpl {
     		throw new BusinessException(1112L) ;//1112', '当前要删除的用户中包括海外联系人，这些用户，请通过联系人方式删除！
     	}
     	
+    	for(Long userId:userIds) {
+        	// get user just for checkOperationAuth
+    		this.get(userId);
+    	}
+    	
     	criterion.setIds(null) ;
     	criterion.setType_(null) ;
         criterion.setUserIds(userIds) ;
@@ -306,7 +324,11 @@ public class UserBO extends BaseServiceImpl {
     }
 
     public User get(Long id) {
-    	return get(id, false, false) ;
+    	User result = get(id, false, false) ;
+    	
+    	checkOperationAuth(result.getOrganization_id(), null);
+    	
+    	return result ;
     }
     
     
@@ -327,8 +349,13 @@ public class UserBO extends BaseServiceImpl {
 			OrganizationSO orgSo = new OrganizationSO();
 			orgSo.setRecord_status(C.RECORD_STATUS_ACTIVE);
 			user.setOrganizations(getOrganizationBO().query(orgSo));
-
-			user.setRoles(getRoleBO().userBelongTo(id));
+			
+			Long limitedUserid = null ;
+	        SessionUser sUser = SessionUser.get() ;
+	        if (!sUser.getRole_codes().contains(Role.CODE_ADMIN)) {
+	        	limitedUserid = sUser.getUser().getId();
+	        }
+			user.setRoles(getRoleBO().userBelongTo(id, limitedUserid));
 		}
 		
         return user;
@@ -496,6 +523,29 @@ public class UserBO extends BaseServiceImpl {
     	
     	so.setPageIndex(ArrayPageList.PAGEINDEX_NO_PAGE) ;
     	return (ArrayPageList<User>)jdbcDao.queryName("systemSQLs:queryUserByRole", so, User.class) ;
+    }
+    
+    private void checkOperationAuth(Long userOrgId, Long[] role_ids) {
+
+        SessionUser sUser = SessionUser.get() ;
+        if (!sUser.getRole_codes().contains(Role.CODE_ADMIN)) {
+        	Long proUserOrgId = CodeHelper.getLong("Organization", "pro_organization_id", userOrgId) ;
+        	Long userDirectOrgId = sUser.getDirect_organization_id() ;
+    		if (userDirectOrgId == null || 
+    				!userDirectOrgId.equals(userOrgId) && !userDirectOrgId.equals(proUserOrgId)) {
+        	    throw new BusinessException(1001L, CodeHelper.getString("Privilege", "name_", 0L)) ;// 当前用户没有操作权限！
+    		}
+    		
+    		if (role_ids != null) {
+    			UserSO so = new UserSO() ;
+    			so.setUser_id(sUser.getUser().getId()) ;
+    			so.setRole_ids(role_ids) ;
+    			
+    			if (jdbcDao.getName("systemSQLs:countUserRolesExcluded", so, 0L) > 0L) {
+    				 throw new BusinessException(1001L, CodeHelper.getString("Privilege", "name_", 0L)) ;// 当前用户没有操作权限！
+    			}
+    		}
+        }
     }
 
     

@@ -1,7 +1,7 @@
 insert into sys_user (id, login_id, Region_Code, Shop_Code, name_cn, name_en, email_, desc_, password_, old_password_1, old_password_2, Password_Changed_On, Effective_Date, Expired_Date, Supervisor_Flag, Lock_Flag, Lock_Count, company_id, organization_id, status_, type_, created_by, created_on, updated_by, updated_on, version_id) values (1, 'ADMIN', '', '', 'admin', null, null, 'admin', 'C4CA4238A0B923820DCC509A6F75849B', null, null, '2012-07-16 10:03:54', '2012-07-16 10:03:54', '2013-01-01 00:00:00', null, null, null, 1, null, 'A', null, null, null, null, null, 1);
 
 
-insert into sys_role (id, pro_role_id, code_, name_, desc_) values (1, 0, '', '系统管理员', null);
+insert into sys_role (id, pro_role_id, code_, name_, desc_) values (1, 0, 'ADMIN', '系统管理员', null);
 
 
 /* system */

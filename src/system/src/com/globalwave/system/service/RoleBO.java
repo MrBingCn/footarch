@@ -174,13 +174,14 @@ public class RoleBO extends BaseServiceImpl {
         return org;
     }
 
-    public ArrayPageList<Role> userBelongTo(Long userId) {
+    public ArrayPageList<Role> userBelongTo(Long userId, Long limitedUserId) {
     	
         //String Sql = String.format(RoleSO.USER_BELONG_TO_ORGANIZATION, userId) ;
         //return (ArrayPageList<Role>)jdbcDao.query(new StringBuffer(Sql), null, 1, Integer.MAX_VALUE, null, Role.class);
 
     	UserSO so = new UserSO() ;
     	so.setUser_id(userId) ;
+    	so.setLimited_user_id(limitedUserId);
     	so.setPageIndex(ArrayPageList.PAGEINDEX_NO_PAGE) ;
     	return (ArrayPageList<Role>)jdbcDao.queryName("systemSQLs:user_belong_to_role", so, Role.class) ;
     }

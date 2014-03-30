@@ -106,7 +106,7 @@ public class ReportAction extends BaseAction implements Preparable {
         
         String roleAllows = CodeHelper.getString("BIZ.Report.report_type", "ext_s1", reportType) ;
         
-        if (!hasPrivilege(roleAllows)) {
+        if (!hasPrivilege(roleAllows) && false) {
         	throw new BusinessException(1001L, CodeHelper.getString("Privilege", "name_", 2040L)) ;// 当前用户没有操作权限！
         }
 

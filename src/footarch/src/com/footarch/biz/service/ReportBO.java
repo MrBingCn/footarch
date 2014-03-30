@@ -80,7 +80,7 @@ public class ReportBO extends BaseServiceImpl {
     	reportSO.setPageIndex(ArrayPageList.PAGEINDEX_NO_PAGE) ;
     	
 		Report report = null ;
-		if (type > 100 && type < 200) {
+		if (type > 1000 && type < 2000) {
 			//report = unpaid(reportSO, type) ;
 		} else {
 			try {
@@ -102,8 +102,24 @@ public class ReportBO extends BaseServiceImpl {
 		return report ;
 	}
 	
-
 	
+	public Report agentProfit(ReportSO reportSO) {
+
+		Report report = new Report() ;
+		
+		report.setSo(reportSO) ;
+    	
+    	ArrayPageList<Map<String, Object>> list = 
+    			(ArrayPageList<Map<String, Object>>)jdbcDao.queryName("reportSQLs:orderDetailForm+orderOrderBy", reportSO, HashMap.class) ;
+
+    	report.setOrder_count(list.size()) ;
+
+	    report.setItems(this.removeRedundance(list, new String[]{"agent_id_1", "agent_id_2", "agent_id_3"})) ;
+		
+		report.setUser(SessionUser.get().getUser()) ;
+		
+		return report ;
+	}
 
     /**
      * 查询所有订单，用于显示

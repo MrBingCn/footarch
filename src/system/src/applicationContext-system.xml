@@ -1,52 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
 <beans default-autowire="byName" default-lazy-init="true">
-
-    <!-- 
-	<bean id="userDao" scope="prototype" class="com.globalwave.system.dao.UserHBDao" />
-	 -->
-	  
-	<!--
-	<bean id="userService" scope="prototype" class="com.globalwave.system.service.UserServiceImpl" />
-	
-	<bean id="system_userAction" scope="prototype" class="com.globalwave.system.web.UserAction"/>	
-	
-	
-	<bean id="organizationService" scope="prototype" class="com.globalwave.system.service.OrganizationServiceImpl" />
-	
-	<bean id="system_organizationAction" scope="prototype" class="com.globalwave.system.web.OrganizationAction"/>	
-	
-	
-	<bean id="privilegeService" scope="prototype" class="com.globalwave.system.service.PrivilegeServiceImpl" />
-	
-	<bean id="system_privilegeAction" scope="prototype" class="com.globalwave.system.web.PrivilegeAction"/>	
-	-->
-	
-	<!-- 
-	<bean id="dictService" scope="prototype" class="com.globalwave.system.service.DictServiceImpl" />
-	
-	<bean id="system_dictAction" scope="prototype" class="com.globalwave.system.web.DictAction"/>	
-	 -->
-	
-	
-	<!-- for system TaskLog config
-    <bean id="taskConfigService" scope="prototype" class="com.globalwave.system.service.TaskConfigServiceImpl" />
-    <bean id="system_taskConfigAction" scope="prototype" class="com.globalwave.system.web.TaskConfigAction"/> 
-    
-    <bean id="taskLogService" scope="prototype" class="com.globalwave.system.service.TaskLogServiceImpl" />
-    <bean id="system_taskLogAction" scope="prototype" class="com.globalwave.system.web.TaskLogAction"/> 
-	 //-->
-	
-    <!-- for system ShopProfile config 
-    <bean id="shopProfileService" scope="prototype" class="com.globalwave.system.service.ShopProfileServiceImpl" />
-    <bean id="system_shopProfileAction" scope="prototype" class="com.globalwave.system.web.ShopProfileAction"/> 
-    //-->
-	
-	<!-- for system TerminalProfile config 
-    <bean id="terminalProfileService" scope="prototype" class="com.globalwave.system.service.TerminalProfileServiceImpl" />
-    <bean id="system_terminalProfileAction" scope="prototype" class="com.globalwave.system.web.TerminalProfileAction"/> 
-	//-->
-	
 	
     <bean id="systemSQLs" class="com.globalwave.common.db.BaseSQLs">
       <property name="sqls">
@@ -139,6 +93,21 @@ order by org.id
             </value>
           </entry>    
           
+          <entry key="queryUsers">
+            <value>
+              <![CDATA[
+select * from sys_user u 
+ where 1=1
+  {and name_cn like [name_cn]}
+  {and login_id like [login_id_like]}  
+  {and organization_id = [organization_id]}  
+  {and exists(select 1 from sys_organization o 
+               where o.id=u.organization_id
+                 and (o.id=[limited_organization_id] or o.pro_organization_id=[limited_organization_id]))}
+              ]]>
+            </value>
+          </entry> 
+          
           <entry key="queryUserByRole">
             <value>
               <![CDATA[
@@ -165,8 +134,9 @@ select  * from sys_user u where u.status_='A' and exists (
          r.name_ name_, 
          r.desc_ desc_, 
          ro.user_id user_id
-    from sys_role r left join sys_user_role ro 
-                on r.id = ro.role_id and ro.user_id=[user_id] 
+    from sys_role r left join sys_user_role ro on r.id = ro.role_id and ro.user_id=[user_id]
+   where 1=1
+    {and exists(select 1 from sys_user_role lur where r.id = lur.role_id and lur.user_id=[limited_user_id])}
 order by r.id
               ]]>
             </value>
@@ -186,6 +156,18 @@ order by r.id
                 on r.id = ro.role_id
    where ro.user_id=[user_id] 
 order by r.id
+              ]]>
+            </value>
+          </entry>   
+          
+          
+          <entry key="countUserRolesExcluded">
+            <value>
+              <![CDATA[
+  select count(1)
+    from sys_role r 
+   where not exists(select 1 from sys_user_role ur where ur.user_id=[user_id] and r.id = ur.role_id)
+     and r.id in ([role_ids])
               ]]>
             </value>
           </entry>    

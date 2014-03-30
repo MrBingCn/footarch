@@ -8,6 +8,9 @@ import com.globalwave.common.C;
 
 public class UserSO extends BaseSO {
     private Long user_id  ;
+    
+    @Column(name="user_id")
+    private Long limited_user_id  ;
     private String status_ ;
     @Comparison(operator = Comparison.EQ)
     private String login_id ;
@@ -23,14 +26,20 @@ public class UserSO extends BaseSO {
 
     @Column(name="user_id")
     private Long[] userIds ;
+    
+    @Column(name="role_id")
+    private Long[] role_ids ;
 
-
+    
     @Column(name="id")
     private Long[] ids ;
 
     private Long company_id  ;
     
     private Long organization_id;
+    
+    @Column(name="organization_id")
+    private Long limited_organization_id  ;
     
     private String type_ ;
 
@@ -149,6 +158,25 @@ public class UserSO extends BaseSO {
 		this.organization_id = organization_id;
 	}
 	
+	public Long getLimited_user_id() {
+		return limited_user_id;
+	}
+	public void setLimited_user_id(Long limited_user_id) {
+		this.limited_user_id = limited_user_id;
+	}
+	
+	public Long getLimited_organization_id() {
+		return limited_organization_id;
+	}
+	public void setLimited_organization_id(Long limited_organization_id) {
+		this.limited_organization_id = limited_organization_id;
+	}
+	public Long[] getRole_ids() {
+		return role_ids;
+	}
+	public void setRole_ids(Long[] role_ids) {
+		this.role_ids = role_ids;
+	}
 	@Override
 	public Class<?> getTableClass() {
 		return User.class;
