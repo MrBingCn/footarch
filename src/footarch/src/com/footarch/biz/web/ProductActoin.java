@@ -41,11 +41,59 @@ public class ProductActoin extends BaseAction implements Preparable {
         return null ;  
     }
 
+	@Pid(value=Pid.LOGINED,log=false)
+    public String get4Edit() throws Exception {  
+    	Product product = productBO.get4Edit(this.id) ;
+
+    	renderObject(product, null) ; 
+        return null ;  
+    }
+
     @Pid(value=4001)
     public String create()  throws Exception {        
         Object newObj = productBO.create(product) ;
         CodeHelper.reload("Product") ;
         renderObject(newObj, ResponseMessage.KEY_CREATE_OK) ;
+        return null;    
+    }
+
+    @Pid(value=4001)
+    public String addColor()  throws Exception {        
+        Object newObj = productBO.addColor(product) ;
+        CodeHelper.reload("Product") ;
+        renderObject(newObj, ResponseMessage.KEY_UPDATE_OK) ;
+        return null;    
+    }
+
+    @Pid(value=4001)
+    public String addSize()  throws Exception {        
+        Object newObj = productBO.addSize(product) ;
+        CodeHelper.reload("Product") ;
+        renderObject(newObj, ResponseMessage.KEY_UPDATE_OK) ;
+        return null;    
+    }
+
+    @Pid(value=4001)
+    public String removeColor()  throws Exception {        
+        Object newObj = productBO.removeColor(product) ;
+        CodeHelper.reload("Product") ;
+        renderObject(newObj, ResponseMessage.KEY_DELETE_OK) ;
+        return null;    
+    }
+
+    @Pid(value=4001)
+    public String getProductByColorSize()  throws Exception {        
+        renderObject(productBO.getProductByColorSize(product) , null) ;
+        return null;    
+    }
+    
+    
+
+    @Pid(value=4001)
+    public String removeSize()  throws Exception {        
+        Object newObj = productBO.removeSize(product) ;
+        CodeHelper.reload("Product") ;
+        renderObject(newObj, ResponseMessage.KEY_DELETE_OK) ;
         return null;    
     }
 

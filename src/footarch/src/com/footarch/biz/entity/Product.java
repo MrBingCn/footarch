@@ -1,14 +1,17 @@
 package com.footarch.biz.entity;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.globalwave.base.BaseEntity;
+import com.globalwave.base.annotations.Comparison;
 import com.globalwave.base.annotations.Versionable;
 
 @Entity
@@ -20,6 +23,7 @@ public class Product extends BaseEntity {
     @GeneratedValue(strategy=GenerationType.AUTO)
 	private Long id;
 
+    private Long pro_product_id ;
     private Long product_category_id  ;
     private String brand_id  ;
     private String code_                ;
@@ -31,18 +35,36 @@ public class Product extends BaseEntity {
     private String main_photo_uuid              ;
     private Integer click_count ;
     
-    private double weight_ ;
-    private double market_price ;
-    private double selling_price ;
-    private double promote_price ;
+    private Double weight_ ;
+    private Double market_price ;
+    private Double selling_price ;
+    private Double promote_price ;
 
     private Timestamp promote_start_on ;
     private Timestamp promote_end_on ;
     
     //private Integer order_ ;
+    
+    @Comparison(operator=Comparison.EQ)
+    private String color_ ;
+    @Comparison(operator=Comparison.EQ)
+    private String size_;
 
+    @Comparison(operator=Comparison.EQ)
     private String record_status        ;
-        
+
+    
+    @Transient
+    private List<Product> colors ;
+    
+    @Transient
+    private List<Product> sizes ;
+
+    @Transient
+    private List<ProductPhoto> productPhotoes;
+    
+    @Transient
+    private Product pro_product ;
     
 	public Long getId() {
 		return id;
@@ -117,28 +139,28 @@ public class Product extends BaseEntity {
 	public void setClick_count(Integer click_count) {
 		this.click_count = click_count;
 	}
-	public double getWeight_() {
+	public Double getWeight_() {
 		return weight_;
 	}
-	public void setWeight_(double weight_) {
+	public void setWeight_(Double weight_) {
 		this.weight_ = weight_;
 	}
-	public double getMarket_price() {
+	public Double getMarket_price() {
 		return market_price;
 	}
-	public void setMarket_price(double market_price) {
+	public void setMarket_price(Double market_price) {
 		this.market_price = market_price;
 	}
-	public double getSelling_price() {
+	public Double getSelling_price() {
 		return selling_price;
 	}
-	public void setSelling_price(double selling_price) {
+	public void setSelling_price(Double selling_price) {
 		this.selling_price = selling_price;
 	}
-	public double getPromote_price() {
+	public Double getPromote_price() {
 		return promote_price;
 	}
-	public void setPromote_price(double promote_price) {
+	public void setPromote_price(Double promote_price) {
 		this.promote_price = promote_price;
 	}
 	public Timestamp getPromote_start_on() {
@@ -152,6 +174,48 @@ public class Product extends BaseEntity {
 	}
 	public void setPromote_end_on(Timestamp promote_end_on) {
 		this.promote_end_on = promote_end_on;
+	}
+	public Long getPro_product_id() {
+		return pro_product_id;
+	}
+	public void setPro_product_id(Long pro_product_id) {
+		this.pro_product_id = pro_product_id;
+	}
+	public String getColor_() {
+		return color_;
+	}
+	public void setColor_(String color_) {
+		this.color_ = color_;
+	}
+	public String getSize_() {
+		return size_;
+	}
+	public void setSize_(String size_) {
+		this.size_ = size_;
+	}
+	public List<Product> getColors() {
+		return colors;
+	}
+	public void setColors(List<Product> colors) {
+		this.colors = colors;
+	}
+	public List<Product> getSizes() {
+		return sizes;
+	}
+	public void setSizes(List<Product> sizes) {
+		this.sizes = sizes;
+	}
+	public Product getPro_product() {
+		return pro_product;
+	}
+	public void setPro_product(Product pro_product) {
+		this.pro_product = pro_product;
+	}
+	public List<ProductPhoto> getProductPhotoes() {
+		return productPhotoes;
+	}
+	public void setProductPhotoes(List<ProductPhoto> productPhotoes) {
+		this.productPhotoes = productPhotoes;
 	}
 	
 	

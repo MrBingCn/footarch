@@ -19,6 +19,69 @@ select o.id,o.time_place,o.total,o.pay_system_name,o.status from biz_order_sale 
           </entry>
           
           
+          <entry key="queryProductColors">
+            <value>
+              <![CDATA[
+select distinct(color_)
+  from biz_product 
+ where record_status<>'C' 
+   and color_ is not null 
+   and color_ <> '' 
+   and pro_product_id=[pro_product_id]
+              ]]>
+            </value>
+          </entry>
+          
+          <entry key="queryProductSizes">
+            <value>
+              <![CDATA[
+select distinct(size_)
+  from biz_product 
+ where record_status<>'C' 
+   and size_ is not null 
+   and size_ <> '' 
+   and pro_product_id=[pro_product_id] 
+  {and color_=[color_]}
+              ]]>
+            </value>
+          </entry>
+          
+          
+          <entry key="removeProductColors">
+            <value>
+              <![CDATA[
+update biz_product set record_status='C'
+ where pro_product_id=[pro_product_id] and color_=[color_]
+              ]]>
+            </value>
+          </entry>
+          
+          
+          <entry key="removeProductSizes">
+            <value>
+              <![CDATA[
+update biz_product set record_status='C'
+ where pro_product_id=[pro_product_id] and color_=[color_] and size_=[size_]
+              ]]>
+            </value>
+          </entry>
+          
+          
+          <entry key="resetCoverFlag">
+            <value>
+              <![CDATA[
+update biz_product_photo 
+   set document_type='p' 
+ where document_type='m' 
+   and id<>[id] 
+   and product_id=[product_id]
+  {and desc_=[desc_]}
+              ]]>
+            </value>
+          </entry>
+          
+          
+          
           
         </map>
       </property>

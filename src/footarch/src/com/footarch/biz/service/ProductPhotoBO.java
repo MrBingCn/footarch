@@ -32,6 +32,14 @@ public class ProductPhotoBO extends BaseServiceImpl {
 
     	Long product_id = productPhoto.getProduct_id();
     	
+    	Product product = (Product)jdbcDao.get(Product.class, product_id) ;
+    	
+    	if  (product.getPro_product_id() != null) {
+    		product_id = product.getPro_product_id() ;
+    		productPhoto.setProduct_id(product_id);
+    		productPhoto.setDesc_(product.getColor_()) ;
+    	}
+    	
     	String sql = "select ifnull(max(file_uuid) + 1, 1) from biz_product_photo where product_id=?" ;
     	productPhoto.setFile_uuid(this.jdbcDao.getString(sql, new Object[]{product_id})) ;
     	
@@ -78,6 +86,8 @@ public class ProductPhotoBO extends BaseServiceImpl {
     private String getFolderName(Long product_id) {
     	return String.valueOf(product_id % 100) + "/" + product_id ;
     }
+    
+    
     private String updateProductMainUUID(long product_id) {
     	ProductPhotoSO productPhotoSO = new ProductPhotoSO();
     	productPhotoSO.setProduct_id(product_id);
@@ -120,11 +130,9 @@ public class ProductPhotoBO extends BaseServiceImpl {
     	
         jdbcDao.update(productPhoto) ;
         
-        jdbcDao.execute(
-        		"update biz_product_photo set document_type='p' where document_type='m' and id<>?", 
-        		new Object[]{id}) ;
+        jdbcDao.executeName("bizSQLs:resetCoverFlag", productPhoto) ;
         
-        productPhoto.setProduct_uuids(this.updateProductMainUUID(productPhoto.getProduct_id()));
+        //productPhoto.setProduct_uuids(this.updateProductMainUUID(productPhoto.getProduct_id()));
         
         return productPhoto;
     }
@@ -174,6 +182,14 @@ public class ProductPhotoBO extends BaseServiceImpl {
     	//new File(destBase).delete() ; 
     }
     
+    public void deleteByProductColor(Long product_id, String color_) {
+    	ArrayPageList<ProductPhoto> photos = query(product_id, color_) ;
+
+    	for (ProductPhoto photo:photos) {
+    		this.delete(photo) ;
+    	}
+    }
+    
     public ArrayPageList<ProductPhoto> query(ProductPhotoSO productPhotoSO) {
 
         if (productPhotoSO == null) {
@@ -186,6 +202,20 @@ public class ProductPhotoBO extends BaseServiceImpl {
     }
 
 
+    
+    public ArrayPageList<ProductPhoto> query(Long product_id, String color_) {
+    	
+    	ProductPhotoSO productPhotoSO = new ProductPhotoSO() ;
+        productPhotoSO.addAsc("order_") ;
+        
+        productPhotoSO.setProduct_id(product_id);
+        productPhotoSO.setDesc_(color_) ;
+        
+        return (ArrayPageList<ProductPhoto>)jdbcDao.query(productPhotoSO, ProductPhoto.class);
+    }
+
+
+    
 
     public ProductPhoto get(Long id) {  
     	ProductPhoto org = new ProductPhoto() ;

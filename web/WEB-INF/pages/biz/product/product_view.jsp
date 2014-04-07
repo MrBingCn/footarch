@@ -8,209 +8,12 @@ String root = request.getContextPath();
 <link type="text/css" rel="stylesheet" href="<%=root%>/plugin/jQuery-TE_v.1.4.0/jquery-te-1.4.0.css">
 <script type="text/javascript" src="<%=root%>/plugin/jQuery-TE_v.1.4.0/jquery-te-1.4.0.min.js" charset="utf-8"></script>
 
+<script type="text/javascript" src="<%=root%>/script/biz/product/product_view.js" charset="utf-8"></script>
 <script>
 
-var g$v<%=view_id%> = $.extend(newView(), {
+var g$v<%=view_id%> = $.extend(productViewParent, {
     view:document.getElementById("view_<%=view_id%>"), 
-    id:<%=view_id%>,
-    list_url:root+"/biz/product_list.action" ,
-    create_url:root + "/biz/product_create.action" ,
-    update_url:root + "/biz/product_update.action" ,
-    get_url:root + "/biz/product_get.action" ,
-    delete_url:root + "/biz/product_delete.action" ,
-    entityName:"product",
-    
-    init:function (){
-        //this.initSelect() ;
-        this.pageIndex = E("productSO.pageIndex") ;
-
-        var proCategory = filter(g$dict.ProProductCategory, {record_status:'A'});
-        var category = filter(g$dict.ProductCategory, {record_status:'A'});
-        var categoryOptions = [] ;
-        
-        for (var i = 0 ; i < proCategory.length ; i ++) {
-        	categoryOptions[categoryOptions.length] = proCategory[i] ;
-        	for (var j = 0 ; j < category.length ; j ++) {
-        		if (category[j].pro_product_category_id == proCategory[i].PK_ID) {
-                     categoryOptions[categoryOptions.length] = {PK_ID:category[j].PK_ID, name_cn:"　　" + category[j].name_cn} ;
-        		}
-        	}
-        }
-        
-        //E$("product.product_type").on("change", this.typeOnChange) ;
-        
-        //fillOptions({id:"productSO.type_", dictName:"CRM.product.type_", firstLabel:"全部产品"}) ;
-        fillOptions({id:"productSO.record_status", dictName:"CM.status", firstLabel:"全部"}) ;
-        fillOptions({id:"product.record_status", dictName:"CM.status", firstLabel:"请选择..."}) ;// 改为字典取值
-        fillOptions({id:"product.product_category_id", data:categoryOptions, textProperty:"name_cn", firstLabel:"请选择..."}) ;
-        fillOptions({id:"product.brand_id", dictName:"Brand", firstLabel:"请选择..."}) ;
-        //fillOptions({id:"product.invoice_type", dictName:"BIZ.invoice.type", firstLabel:"请选择..."}) ;
-
-        this.initDataGrid("productTB", {height:"400px"}) ;
-
-        E$("product.promote_start_on").datepicker();
-        E$("product.promote_end_on").datepicker();
-        
-        E$("eForm").validator();
-        E$("sForm").validator();
-        E("sForm").setFirstFocus();
-
-        this.states.a.onBeforeShow=function(_view, _state) {
-            $("#viewContactBtn, #viewPartyBtn", viewJs.view).hide() ;
-        } ;
-        this.states.e.onBeforeShow=function(_view, _state) {
-            $("#viewContactBtn, #viewPartyBtn", viewJs.view).show() ;
-        } ;
-        
-        E$('product.full_desc').jqte();
-        //this.typeOnChange() ;
-
-        E$("editScollDiv").height((__clientHeight - 200) + "px") ;
-    },
-    
-    checkEditForm:function () {
-    	/*
-        var type = V("product.product_type") ; 
-        if (type == "1") {
-            if (V("product.customer_service_reps") == "") {
-            	alert("请选择客服代表！") ;
-            	return false;
-            } 
-        }
-        */
-        return true ;
-    },
-    
-    get:function(id) {
-        if (id == -1) {
-             viewJs.entity = this.eFormInitData;
-             formDeserialize("eForm", this.eFormInitData, {}) ;// reset form;
-             //this.refreshCustomerServiceRep() ;
-             $("#phototr", viewJs.view).hide() ;
-             E$("product.full_desc").jqteVal("");
-             return ;
-        }
-        $("#phototr", viewJs.view).show() ;
-        
-        var _this = this;
-        
-        var idProperty = (this.idName==null?"id":this.idName) ;
-        var params = {} ;
-        params[idProperty] = id ;
-        ajax(
-            this.get_url, 
-            params,
-            function(data, textStatus){
-                viewJs.entity = data;
-                formDeserialize("eForm", data, {}) ;
-                //viewJs.refreshCustomerServiceRep() ;
-                _this.showPhotos(data.id, data.main_photo_uuid);
-                E$("product.full_desc").jqteVal(data["full_desc"]);
-            }
-        );
-    },
-    
-    saveNotList:function () {
-    	var _this = this ;
-    	this.save(function (_data) {
-    		//_this.toPage("e");
-    		if (V("product.id") == "") {
-                _this.showBlock("e") ;	
-                V("product.id", _data.id);
-                $("#phototr", viewJs.view).show() ;
-                E$("photoDisplayDiv").html("");
-                //_this.typeOnChange();
-                V("product.version_id", _data.version_id);
-    		} else {
-                viewJs.toPage('s') ;
-                viewJs.list() ;
-    		}
-    	});
-    } ,
-    
-    photoUpload:function(){
-    	load("uploadFormWinDiv", root + "/biz/document/document_uploadForm.action", null, function(responseText, textStatus, XMLHttpRequest) {
-            uploader.url = "/biz/productPhoto" ;
-            uploader.getHtml=function(data) {
-            	data.root = root;
-            	data.isCover = (E$("photoDisplayDiv").html() == "") ;
-                return parse(E$("photoItemTemplate").val(), data);
-            }
-            uploader.show(V("product.id"), 'p', 'photoDisplayDiv'); 
-    	});
-    },
-    
-    showPhotos:function(productId, ids) {
-        
-        var $photoDisplayDiv = E$("photoDisplayDiv") ;
-        $photoDisplayDiv.html("");
-        
-        if (ids == null || ids == ""){
-            return ;
-        }
-        
-        //uploader.url = "/biz/productPhoto" ;
-        var idArr = ids.split(",");
-        for (var i = 0 ; i < idArr.length ; i ++)
-        {
-            var ids = idArr[i].split(":");
-            //$photoDisplayDiv.append('<div><img src="' + root + '/photo/' + (productId%100) + '/' + productId + '/' +ids[1] +'.t"/>&nbsp;&nbsp;<a onclick="uploader.doDelete('+ids[0]+', this);" style="cursor:pointer;color:blue;">删除</a></div>');
-            var data = {root:root, product_id:productId, id:ids[0], file_uuid:ids[1], isCover:(i == 0)};
-            $photoDisplayDiv.append(parse(E$("photoItemTemplate").val(), data));
-        }
-    },
-
-    
-    doPhotoDelete:function (id, linkObj) {
-        
-        if (!window.confirm("是否确定要删除？")) {
-            return ;
-        }
-    
-        var _this = this ;
-        
-        ajax(
-            root + "/biz/productPhoto_delete.action", 
-            "document.id="+id,//$("#documentTB input:checked")[0].value,
-            function(data, textStatus){
-                //alert(data.message) ;
-                if (data.code == "0") {
-                    //list() ;
-                    $(linkObj).parent().parent().remove() ;
-                	//_this.showPhotos(data.product_id, data.file_uuid) ;
-                } else {
-                	alert(data.message) ;
-                }
-            }, 
-            false
-        );
-    },
-    
-    doMakeItAsCover:function (id, linkObj) {
-        
-        if (!window.confirm("是否确定设置为封面？")) {
-            return ;
-        }
-    
-        var _this = this ;
-   
-        ajax(
-            root + "/biz/productPhoto_makeItAsCover.action", 
-            "id="+id,//$("#documentTB input:checked")[0].value,
-            function(data, textStatus){
-                //alert(data.message) ;
-                if (data.code == "0") {
-                    //list() ;
-                    //alert(data.product_uuids);
-                    var pPhoto = data.data ;
-                    _this.showPhotos(pPhoto.product_id, pPhoto.product_uuids) ;
-                } else {
-                    alert(data.message) ;
-                }
-            }, 
-            false
-        );
-    }
+    id:<%=view_id%>
 }) ;
 
 </script>
@@ -297,7 +100,7 @@ var g$v<%=view_id%> = $.extend(newView(), {
     <form method="post" id="eForm" name="eForm" onsubmit="return false;" style="margin: 0">
       <input type="hidden" name="product.id" id="product.id"/>
       <input type="hidden" name="product.version_id" id="product.version_id"/>
-      <input type="hidden" name="product.pro_product_id"/>
+      <input type="hidden" name="product.pro_product_id" id="product.pro_product_id"/>
       
   
       <table cellspacing="0" cellpadding="0" width="100%" class="layoutgrid">
@@ -305,30 +108,29 @@ var g$v<%=view_id%> = $.extend(newView(), {
           <td valign="top">
             <table cellspacing="0" cellpadding="0" width="100%" class="formgrid">
               <tr>
-                <td class="label" width="15%">中文名称：</td>
-                <td width="30%"><input type="text" name="product.name_cn" id="product.name_cn" required="required" maxlength="250"/></td>
-                <td class="label" width="15%">英文名称：</td>
-                <td width="30%"><input type="text" name="product.name_en" maxlength="250"/></td>
-              </tr>
-              <tr>
-                <td class="label">分类：</td>
-                <td>
+                <td class="label" width="8%">中文名称：</td>
+                <td width="17%"><input type="text" name="product.name_cn" id="product.name_cn" required="required" maxlength="250"/></td>
+                <td class="label" width="8%">英文名称：</td>
+                <td width="17%"><input type="text" name="product.name_en" maxlength="250"/></td>
+                
+                <td class="label" width="8%">分类：</td>
+                <td width="17%">
                   <select name="product.product_category_id" id="product.product_category_id" required="required">
                   </select>
                 </td>
-                <td class="label">品牌：</td>
-                <td>
+                <td class="label" width="8%">品牌：</td>
+                <td width="17%">
                   <select name="product.brand_id" id="product.brand_id">
                   </select>
                 </td>
               </tr>
+              
               <tr>
                 <td class="label">货号：</td>
                 <td><input type="text" name="product.code_"  maxlength="50" required="required"/></td>
                 <td class="label">关键字：</td>
                 <td><input type="text" name="product.keywords_"  maxlength="50"/></td>
-              </tr>
-              <tr>
+                
                 <td class="label">净重：</td>
                 <td><input type="number" name="product.weight_ " id="product.weight_" maxlength="25"/></td>
                 <td class="label">单位：</td>
@@ -339,6 +141,15 @@ var g$v<%=view_id%> = $.extend(newView(), {
                 <td><input type="number" name="product.market_price" maxlength="10" required="required"/></td>
                 <td class="label">本店售价：</td>
                 <td><input type="number" name="product.selling_price" maxlength="10"/></td>
+                
+
+                <td class="label">状态：</td>
+                <td>
+                  <select name="product.record_status" id="product.record_status" required="required">
+                  </select>
+                </td>
+                <td class="label"></td>
+                <td></td>
               </tr>
               <tr style="display: none;">
                 <td class="label">促销价格：</td>
@@ -350,25 +161,50 @@ var g$v<%=view_id%> = $.extend(newView(), {
                   <input type="text" name="product.promote_end_on" id="product.promote_end_on" maxlength="10" style="width: 80px;"/>
                 </td>
               </tr>
-              <tr>
-                <td class="label" valign="top">描述：</td>
-                <td colspan="3">
-                  <textarea name="product.full_desc" id="product.full_desc" style="height: 60px;"></textarea>
+              
+              <tr id="colorTr">
+                <td class="label">颜色：</td>
+                <td colspan="7"> 
+                  <style>
+                   .itemDiv {
+                    display: inline-block;
+                    margin: 5px;
+                  }
+                   .itemContentDiv {
+                    padding:2px;
+                    margin:2px;
+                    text-align: center;
+                    vertical-align: middle;
+                    background-color: #fff;
+                    min-width:60px;
+                    display: table-cell;
+                    border: 1px solid #0099FF;
+                  }
+                  </style>
+                  <textarea rows="1" cols="1" style="display: none;" id="colorListTemplate">
+                    <div class="itemDiv">
+                      <div style="display: inline-block;cursor: pointer;{#if $T.isSelected}border: 2px solid #0099FF{#/if}" class="itemContentDiv" onclick="viewJs.getProductByColor('{$T.color_}')">
+                        {$T.color_}
+                      </div>
+                      <button type="button" onclick="viewJs.doColorDelete('{$T.color_}', this);" style="margin: 0 0 0 -6px;height: 24px; line-height: 20px;">-</button>
+                    </div>
+                  </textarea>
+
+                  <input type="hidden" name="product.color_" id="product.color_" />
+                  <!-- 
+                  <a onclick="viewJs.get(V('product.id'), this);" style="cursor:pointer;color:blue;display: inline-block;">[N/A]</a>
+                   -->
+                  <div id="colorListDiv" style="display: inline-block;"></div>
+                  <div style="display: inline-block;">
+                    <input type="text" name="product.color_new" id="product.color_new" maxlength="10" style="width: 80px;"/>
+                    <button type="button" onclick="viewJs.doColorAdd(this);" style="margin: 0 0 0 -5px;height: 24px; line-height: 20px;">+</button>
+                  </div>
                 </td>
               </tr>
-              <tr>
-                <td class="label">状态：</td>
-                <td>
-                  <select name="product.record_status" id="product.record_status" required="required">
-                  </select>
-                </td>
-                <td class="label"></td>
-                <td>
-                </td>
-              </tr>
-              <tr id="phototr">
-                <td class="label">图片：</td>
-                <td colspan="3">
+              
+              <tr id="photoTr">
+                <td class="label" valign="top">图片：</td>
+                <td colspan="7" valign="top">
                   <style>
                   #photoDisplayDiv .documentItemDiv {
                     display: inline-block;
@@ -389,25 +225,57 @@ var g$v<%=view_id%> = $.extend(newView(), {
                     max-height: 100px;
                     max-width: 100px;
                   }
-				  </style>
-				  
-				  <textarea rows="1" cols="1" style="display: none;" id="photoItemTemplate">
-				    <div class="documentItemDiv">
-				      <div {#if $T.isCover}style="border: 2px solid #0099FF"{#/if} class="photoImgDiv" >
+                  </style>
+                  
+                  <textarea rows="1" cols="1" style="display: none;" id="photoItemTemplate">
+                    <div class="documentItemDiv">
+                      <div {#if $T.document_type == 'm'}style="border: 2px solid #0099FF"{#/if} class="photoImgDiv" >
                         <img src="{$T.root}/photo/{$T.product_id%100}/{$T.product_id}/{$T.file_uuid}.t"/>
-				      </div>
-				      <div style="text-align: right;">
-				        {#if !$T.isCover}
-				        <a onclick="viewJs.doMakeItAsCover({$T.id}, this);" style="cursor:pointer;color:blue;">设为封面</a>
-				        {#/if}
-				        &nbsp;
+                      </div>
+                      <div style="text-align: right;">
+                        {#if $T.document_type != 'm'}
+                        <a onclick="viewJs.doMakeItAsCover({$T.id}, this);" style="cursor:pointer;color:blue;">设为封面</a>
+                        {#/if}
+                        &nbsp;
                         <a onclick="viewJs.doPhotoDelete({$T.id}, this);" style="cursor:pointer;color:blue;">删除</a>
-				      </div>
-				    </div>
-				  </textarea>
+                      </div>
+                    </div>
+                  </textarea>
+                  
+                  <div id="photoDisplayDiv" style="display:inline-block;"></div>
                   <button type="button" onclick="viewJs.photoUpload();">上传</button>
-                  <br/>
-                  <div id="photoDisplayDiv"></div>
+                </td>
+              </tr>
+              
+              <tr id="sizeTr">
+                <td class="label">尺码：</td>
+                <td colspan="7">
+                  <textarea rows="1" cols="1" style="display: none;" id="sizeListTemplate">
+                    <div class="itemDiv">
+                      <div style="display: inline-block;cursor: pointer;{#if $T.isSelected}border: 2px solid #0099FF{#/if}" class="itemContentDiv" onclick="viewJs.getProductBySize('{$T.size_}')">
+                        {$T.size_}
+                      </div>
+                      <button type="button" onclick="viewJs.doSizeDelete('{$T.size_}', this);" style="margin: 0 0 0 -6px;height: 24px; line-height: 20px;">-</button>
+                    </div>
+                  </textarea>
+
+                  <input type="hidden" name="product.size_" id="product.size_" />
+                  <!-- 
+                  <a onclick="viewJs.get(V('product.id'), this);" style="cursor:pointer;color:blue;display: inline-block;">[N/A]</a>
+                   -->
+                  <div id="sizeListDiv" style="display: inline-block;"></div>
+                  <div style="display: inline-block;">
+                    <input type="text" name="product.size_new" id="product.size_new" maxlength="10" style="width: 80px;"/>
+                    <button type="button" onclick="viewJs.doSizeAdd(this);" style="margin: 0 0 0 -5px;height: 24px; line-height: 20px;">+</button>
+                  </div>
+                </td>
+              </tr>
+              
+              
+              <tr>
+                <td class="label" valign="top">描述：</td>
+                <td colspan="7">
+                  <textarea name="product.full_desc" id="product.full_desc" style="height: 60px;"></textarea>
                 </td>
               </tr>
               

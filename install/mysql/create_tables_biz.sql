@@ -210,6 +210,7 @@ create table biz_product_category  (
 /*==============================================================*/
 create table biz_product  (
     id                 bigint(12)   not null AUTO_INCREMENT,
+    pro_product_id     bigint(12) comment '父产品id',
     product_category_id bigint(12)  comment '商品所属商品分类id，取值 ecs_category的cat_id ',
     brand_id varchar(50)  comment '品牌id，取值于ecs_brand 的 brand_id ',
     
@@ -234,6 +235,9 @@ create table biz_product  (
     
     inventory_total_quantity int  comment '商品库存数量 ',
     inventory_safety_quantity int  comment '商品报警数量 ',
+    
+    color_ varchar(50)  comment '颜色',
+    size_ varchar(50)  comment '尺寸',
     
     record_status     CHAR(1) default 'A' NOT NULL,
    

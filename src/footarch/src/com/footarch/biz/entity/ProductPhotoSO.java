@@ -3,6 +3,7 @@ package com.footarch.biz.entity;
 import javax.persistence.Column;
 
 import com.globalwave.base.BaseSO;
+import com.globalwave.base.annotations.Comparison;
 
 
 public class ProductPhotoSO extends BaseSO {
@@ -13,6 +14,9 @@ public class ProductPhotoSO extends BaseSO {
     private Long product_id ;
 
     private String name_cn ;
+    
+    @Comparison(operator=Comparison.EQ)
+    private String desc_ ;
 
     private String record_status        ;
     
@@ -57,6 +61,14 @@ public class ProductPhotoSO extends BaseSO {
 
 	public void setProduct_id(Long product_id) {
 		this.product_id = product_id;
+	}
+
+	public String getDesc_() {
+		return desc_;
+	}
+
+	public void setDesc_(String desc_) {
+		this.desc_ = desc_;
 	}
 
 	@Override
