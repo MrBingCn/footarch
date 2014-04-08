@@ -26,6 +26,7 @@ public class OrderItems extends BaseEntity {
 	private Double price;
 	private Integer quantity;
 	private Double adjustment;
+	private String gift;
 	@Transient
 	@JsonSkip
 	private Order order;
@@ -92,5 +93,11 @@ public class OrderItems extends BaseEntity {
 	}
 	public void setOrder(Order order) {
 		this.order = order;
+	}
+	public String getGift() {
+		return gift;
+	}
+	public void setGift(String gift) {
+		this.gift = gift;
 	}
 }
