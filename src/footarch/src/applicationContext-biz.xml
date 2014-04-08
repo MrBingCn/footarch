@@ -18,6 +18,21 @@ select o.id,o.time_place,o.total,o.pay_system_name,o.status from biz_order_sale 
             </value>
           </entry>
           
+          <entry key="promotions">
+            <value>
+              <![CDATA[
+select p.* from biz_promotion p where p.status=1   
+   {and (
+   (p.begin_date is null and p.end_date is null) or 
+   (p.begin_date is not null and p.end_date is null and p.begin_date <= [checkTime]) or 
+   (p.begin_date is null and p.end_date is not null and p.end_date >= [checkTime]) or 
+   (p.begin_date is not null and p.end_date is not null and p.begin_date <= [checkTime] and p.end_date >= [checkTime])
+   )} 
+order by weight desc
+              ]]>
+            </value>
+          </entry>
+          
           
           <entry key="queryProductColors">
             <value>
